@@ -3,10 +3,7 @@ import json
 from mnemonic import Mnemonic
 
 api_key = "YOUR-API-KEY"
-
-
 mnemonic = "YOUR-MEMONIC-CODE"
-
 
 # Set the recipient address
 recipient_address = 'TNo4hakGCPWdPCAejiSENYsDZpccoGF2Xr'
