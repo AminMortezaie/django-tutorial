@@ -2,7 +2,7 @@ import requests
 import json
 from mnemonic import Mnemonic
 
-api_key = "382d1202-34e8-4b4f-b458-f37df1bff346"
+api_key = "YOUR-API-KEY"
 
 
 mnemonic = "YOUR-MEMONIC-CODE"
