@@ -3,7 +3,7 @@ import base58
 import json
 
 url = "https://trx.getblock.io/wallet/getaccount"
-api_key = "YOUR_API-KEY"
+api_key = "YOUR-API-KEY"
 tron_address = "TRX6Q82wMqWNbCCiLqejbZe43wk1h1zJHm"
 headers = {
     "x-api-key": api_key,
