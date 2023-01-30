@@ -2,9 +2,11 @@ import requests
 import base58
 import json
 
-url = "https://trx.getblock.io/wallet/getaccount"
+
 api_key = "YOUR-API-KEY"
 tron_address = "TRX6Q82wMqWNbCCiLqejbZe43wk1h1zJHm"
+url = "https://trx.getblock.io/wallet/getaccount"
+
 headers = {
     "x-api-key": api_key,
     "accept": "application/json",
@@ -41,4 +43,5 @@ def main():
     print(asset_list)
 
 
-main()
+if __name__ == '__main__':
+    main()
