@@ -1,3 +1,9 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+/basic-poll-app-django.iml
+/misc.xml
+/modules.xml
+/inspectionProfiles/profiles_settings.xml
+/vcs.xml
+../myenv
