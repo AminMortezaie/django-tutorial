@@ -59,3 +59,22 @@ If you wish to use another database, install the appropriate database bindings a
 
 - _ENGINE_ – Either `'django.db.backends.sqlite3'`, `'django.db.backends.postgresql'`, `'django.db.backends.mysql'`, or `'django.db.backends.oracle'`. Other backends are also available.
 - _NAME_ – The name of your database. If you’re using SQLite, the database will be a file on your computer; in that case, NAME should be the full absolute path, including filename, of that file. The default value, `BASE_DIR / 'db.sqlite3'`, will store the file in your project directory.
+
+# Migrate Command
+## Installed Apps
+By default, INSTALLED_APPS contains the following apps, all of which come with Django:
+
+- django.contrib.admin – The admin site. You’ll use it shortly.
+- django.contrib.auth – An authentication system.
+- django.contrib.contenttypes – A framework for content types.
+- django.contrib.sessions – A session framework.
+- django.contrib.messages – A messaging framework.
+- django.contrib.staticfiles – A framework for managing static files.
+
+These applications are included by default as a convenience for the common case.
+
+Some of these applications make use of at least one database table, though, so we need to create the tables in the database before we can use them. To do that, run the following command:
+`py manage.py migrate`
+
+### Migrate 
+The **migrate** command looks at the `INSTALLED_APPS` setting and creates any necessary database tables according to the database settings in your `mysite/settings.py` file and the database migrations shipped with the app. You’ll see a message for each migration it applies. If you’re interested, run the command-line client for your database and type `\dt` (PostgreSQL), `SHOW TABLES;` (MariaDB, MySQL), **.schema** (SQLite), or `SELECT TABLE_NAME FROM USER_TABLES`; (Oracle) to display the tables Django created.
