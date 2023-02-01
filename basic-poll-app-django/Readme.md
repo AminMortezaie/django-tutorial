@@ -33,11 +33,11 @@ Some key benefits of using the Django development server include:
 While the Django development server is great for development, it is not intended for use in a production environment. For production deployment, you should use a more robust and scalable web server, such as Apache or Nginx.
 
 # path() arguments 
-The path() function is passed four arguments, two required: route and view, and two optional: kwargs, and name. At this point, it’s worth reviewing what these arguments are for.
+The `path()` function is passed four arguments, two required: **route and view**, and two optional: **kwargs, and name**. At this point, it’s worth reviewing what these arguments are for.
 
 - **route:**
 route is a string that contains a URL pattern. When processing a request, Django starts at the first pattern in urlpatterns and makes its way down the list, comparing the requested URL against each pattern until it finds one that matches.
-Patterns don’t search GET and POST parameters, or the domain name. For example, in a request to https://www.example.com/myapp/, the URLconf will look for myapp/. In a request to https://www.example.com/myapp/?page=3, the URLconf will also look for myapp/.
+Patterns don’t search GET and POST parameters, or the domain name. For example, in a request to https://www.example.com/myapp/, the URLconf will look for `myapp/`. In a request to https://www.example.com/myapp/?page=3, the URLconf will also look for `myapp/`.
 
 
 - **view:**
@@ -52,10 +52,10 @@ Arbitrary keyword arguments can be passed in a dictionary to the target view. We
 Naming your URL lets you refer to it unambiguously from elsewhere in Django, especially from within templates. This powerful feature allows you to make global changes to the URL patterns of your project while only touching a single file.
 
 # Database Setup
-Now, open up mysite/settings.py. It’s a normal Python module with module-level variables representing Django settings.
+Now, open up `mysite/settings.py`. It’s a normal Python module with module-level variables representing Django settings.
 By default, the configuration uses SQLite. If you’re new to databases, or you’re just interested in trying Django, this is the easiest choice. SQLite is included in Python, so you won’t need to install anything else to support your database.
 
 If you wish to use another database, install the appropriate database bindings and change the following keys in the DATABASES 'default' item to match your database connection settings:
 
-- _ENGINE_ – Either 'django.db.backends.sqlite3', 'django.db.backends.postgresql', 'django.db.backends.mysql', or 'django.db.backends.oracle'. Other backends are also available.
-- _NAME_ – The name of your database. If you’re using SQLite, the database will be a file on your computer; in that case, NAME should be the full absolute path, including filename, of that file. The default value, BASE_DIR / 'db.sqlite3', will store the file in your project directory.
+- _ENGINE_ – Either `'django.db.backends.sqlite3'`, `'django.db.backends.postgresql'`, `'django.db.backends.mysql'`, or `'django.db.backends.oracle'`. Other backends are also available.
+- _NAME_ – The name of your database. If you’re using SQLite, the database will be a file on your computer; in that case, NAME should be the full absolute path, including filename, of that file. The default value, `BASE_DIR / 'db.sqlite3'`, will store the file in your project directory.
