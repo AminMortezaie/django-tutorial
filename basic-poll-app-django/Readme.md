@@ -78,3 +78,37 @@ Some of these applications make use of at least one database table, though, so w
 
 ### Migrate 
 The **migrate** command looks at the `INSTALLED_APPS` setting and creates any necessary database tables according to the database settings in your `mysite/settings.py` file and the database migrations shipped with the app. You’ll see a message for each migration it applies. If you’re interested, run the command-line client for your database and type `\dt` (PostgreSQL), `SHOW TABLES;` (MariaDB, MySQL), **.schema** (SQLite), or `SELECT TABLE_NAME FROM USER_TABLES`; (Oracle) to display the tables Django created.
+
+# DRY(Don't repeat yourself) Principle in Django
+The DRY (Don't Repeat Yourself) principle is a software design principle that states that every piece of knowledge or logic in a software system should have a single, unambiguous, authoritative representation. In Django, this principle is applied through the use of reusable code and modular design, which helps to keep the codebase clean and maintainable. 
+
+For example, common functionality, such as authentication and authorization, can be placed in a separate module and reused across multiple applications. This helps to minimize duplication of code and reduces the likelihood of bugs and inconsistencies.
+
+In Django, the DRY principle is achieved through the use of reusable code, such as reusable templates and generic views. Additionally, the DRY principle can be achieved through the use of mixins and abstract classes, which allow you to extract common functionality into a single place.
+Here's a simple example to illustrate the concept of DRY in Django:
+```python
+def book_view(request):
+    books = Book.objects.all()
+    context = {'books': books}
+    return render(request, 'book_template.html', context)
+
+def movie_view(request):
+    movies = Movie.objects.all()
+    context = {'movies': movies}
+    return render(request, 'movie_template.html', context)
+
+def album_view(request):
+    albums = Album.objects.all()
+    context = {'albums': albums}
+    return render(request, 'album_template.html', context)
+```
+
+As you can see, each view is essentially doing the same thing: retrieving a list of objects, generating a context dictionary, and rendering a template. This violates the DRY principle because the same code is being repeated in each view.
+
+To follow the DRY principle, you could refactor this code into a single, reusable function. For example:
+```python
+def object_view(request, model):
+    objects = model.objects.all()
+    context = {'objects': objects}
+    return render(request, '{}_template.html'.format(model._meta.model_name), context)
+```
