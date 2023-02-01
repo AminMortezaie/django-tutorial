@@ -79,7 +79,7 @@ Some of these applications make use of at least one database table, though, so w
 ### Migrate 
 The **migrate** command looks at the `INSTALLED_APPS` setting and creates any necessary database tables according to the database settings in your `mysite/settings.py` file and the database migrations shipped with the app. You’ll see a message for each migration it applies. If you’re interested, run the command-line client for your database and type `\dt` (PostgreSQL), `SHOW TABLES;` (MariaDB, MySQL), **.schema** (SQLite), or `SELECT TABLE_NAME FROM USER_TABLES`; (Oracle) to display the tables Django created.
 
-# DRY(Don't repeat yourself) Principle in Django
+# DRY Principle in Django
 The DRY (Don't Repeat Yourself) principle is a software design principle that states that every piece of knowledge or logic in a software system should have a single, unambiguous, authoritative representation. In Django, this principle is applied through the use of reusable code and modular design, which helps to keep the codebase clean and maintainable. 
 
 For example, common functionality, such as authentication and authorization, can be placed in a separate module and reused across multiple applications. This helps to minimize duplication of code and reduces the likelihood of bugs and inconsistencies.
