@@ -1,7 +1,7 @@
 import requests
 import json
 
-api_key = "382d1202-34e8-4b4f-b458-f37df1bff346"
+api_key = "YOUR-API-KEY"
 transaction_id = "1d1fa771b91b65341db116519bf2bf217c32341f9c01026be6ff6723d32f4ade"
 
 url = "https://trx.getblock.io/mainnet/fullnode/jsonrpc"
