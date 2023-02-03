@@ -112,3 +112,6 @@ def object_view(request, model):
     context = {'objects': objects}
     return render(request, '{}_template.html'.format(model._meta.model_name), context)
 ```
+
+# Creating Models
+A model is the single, definitive source of information about your data. It contains the essential fields and behaviors of the data you’re storing. Django follows the DRY Principle. The goal is to define your data model in one place and automatically derive things from it.
