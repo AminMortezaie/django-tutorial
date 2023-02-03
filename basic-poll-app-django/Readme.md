@@ -115,3 +115,23 @@ def object_view(request, model):
 
 # Creating Models
 A model is the single, definitive source of information about your data. It contains the essential fields and behaviors of the data you’re storing. Django follows the DRY Principle. The goal is to define your data model in one place and automatically derive things from it.
+This includes the migrations - unlike in Ruby On Rails, for example, migrations are entirely derived from your models file, and are essentially a history that Django can roll through to update your database schema to match your current models.
+
+In Django, models define the structure of the data in your application. They are defined in the models.py file of your Django app and represent tables in your database.
+
+Each model is a Python class that defines fields and behaviors. Fields are the columns of the table, and each field is represented as an instance of a Django field class, such as CharField, IntegerField, DateTimeField, etc.
+
+Models are used to interact with the database, and you can use them to create, read, update, and delete records in the database. Django provides a high-level Object-Relational Mapping (ORM) system that makes it easy to interact with the database without writing raw SQL queries.
+Here's an example of a simple model in Django:
+```python
+from django.db import models
+
+class Book(models.Model):
+    title = models.CharField(max_length=100)
+    author = models.CharField(max_length=100)
+    publication_date = models.DateField()
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    
+    def __str__(self):
+        return self.title
+```
