@@ -141,6 +141,7 @@ After defining your models, you need to create the database tables by running th
 
 # Views in Django
 In Django, views are responsible for processing and handling HTTP requests and returning HTTP responses. They are Python functions or class-based views that take a web request and return a web response. They act as a controller in the Model-View-Template architecture pattern, where they fetch data from models and pass it to templates for rendering. A view can perform any logic, such as querying the database, processing forms, redirecting, and so on. The URL configuration maps URLs to views, allowing different URLs to execute different code.
+
 Here is the different types of Django views:
 
 * **Function-based views:** These are simple Python functions that take a web request as an argument and return a web response. They can be defined as a simple function in views.py and mapped to a URL in the URL configuration.
