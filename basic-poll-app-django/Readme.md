@@ -173,6 +173,38 @@ urlpatterns = [
 ```
 In this example, the URL `/hello/` will trigger the `hello_world` view. The `name` argument is used to give the URL a name, which can be used to refer to the URL in other parts of the code, such as in template tags.
 
+Here's an example of a class-based view in Django:
+```python
+from django.views import View
+from django.http import HttpResponse
+
+class HelloWorldView(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse("Hello, World!")
+```
+Here's an example of a **class-based** view in Django:
+```python
+from django.views import View
+from django.http import HttpResponse
+
+class HelloWorldView(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse("Hello, World!")
+```
+In this example, the `HelloWorldView` class inherits from Django's `View` class and implements the `get` method. The `get` method takes the same arguments as a function-based view `(request, *args, and **kwargs)`, and returns an `HttpResponse` object, just like the function-based example.
+
+To map this view to a URL, you need to add the following to your `urls.py` file:
+```python
+from django.urls import path
+from .views import HelloWorldView
+
+urlpatterns = [
+    path('hello/', HelloWorldView.as_view(), name='hello_world'),
+]
+```
+In this example, the URL `/hello/` will trigger the `HelloWorldView` class. The `as_view` method returns a callable that can be passed to the `path` function, just like a function-based view. The `name` argument is used to give the URL a name, which can be used to refer to the URL in other parts of the code, such as in template tags.
+
+
 For example, in a blog application, you might have the following views:
 
 * Blog homepage – displays the latest few entries.
