@@ -151,7 +151,7 @@ Here is the different types of Django views:
 * **Templates:** Views often pass data to templates, which are used to render HTML pages. Templates are separate from views and contain the presentation logic for a particular HTML page. The data passed from views to templates is commonly known as context data.
 * **Middleware:** Views can be modified by middleware, which is a series of hooks into the request/response processing. Middleware provides a way to execute code before or after the view and to modify the request or response.
 
-### Here is a simple example of a **function-based** view in Django:
+## Here is a simple example of a **function-based** view in Django:
 
 ```python
 from django.shortcuts import render
@@ -174,7 +174,7 @@ urlpatterns = [
 In this example, the URL `/hello/` will trigger the `hello_world` view. The `name` argument is used to give the URL a name, which can be used to refer to the URL in other parts of the code, such as in template tags.
 
 
-### Here's an example of a **class-based** view in Django:
+## Here's an example of a **class-based** view in Django:
 ```python
 from django.views import View
 from django.http import HttpResponse
@@ -196,7 +196,7 @@ urlpatterns = [
 ```
 In this example, the URL `/hello/` will trigger the `HelloWorldView` class. The `as_view` method returns a callable that can be passed to the `path` function, just like a function-based view. The `name` argument is used to give the URL a name, which can be used to refer to the URL in other parts of the code, such as in template tags.
 
-### Here's an example of a class-based view in Django that implements different HTTP methods:
+## Here's an example of a class-based view in Django that implements different HTTP methods:
 
 ```python
 from django.views import View
@@ -220,6 +220,35 @@ urlpatterns = [
     path('hello/', HelloWorldView.as_view(), name='hello_world'),
 ]
 ```
+## Here's an example of a function-based view in Django that uses a template:
+```python
+from django.shortcuts import render
+
+def hello_world(request):
+    return render(request, 'hello_world.html', {'message': 'Hello, World!'})
+```
+In this example, the `hello_world` function uses the render shortcut to `render` a template called `hello_world.html`. The `render` function takes three arguments:
+
+* The `request` object, which represents the incoming HTTP request.
+* The name of the template file to be rendered, as a string.
+* A dictionary of context data that will be passed to the template. In this case, the dictionary contains a single key-value pair, where the key is '`message`' and the value is **'Hello, World!'**.
+
+Here's an example of the `hello_world.html` template:
+```html
+<h1>{{ message }}</h1>
+```
+In this example, the template uses Django's template language to display the `message` from the context. The double curly braces `{{ }}` indicate a template variable, which will be replaced with the value from the context when the template is rendered.
+
+To map this view to a URL, you can use the same URL configuration as in the previous examples:
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('hello/', views.hello_world, name='hello_world'),
+]
+```
+With this configuration, the `/hello/ `URL will trigger the `hello_world` view, which will render the `hello_world.html` template.
 
 For example, in a blog application, you might have the following views:
 
