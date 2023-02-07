@@ -137,4 +137,24 @@ class Book(models.Model):
 ```
 In this example, we have a **Book** model with four fields: **title, author, publication_date,** and **price**. The `__str__` method returns a string representation of the model, which is used for display purposes.
 
-After defining your models, you need to create the database tables by running the following command: `python manage.py makemigrations`. Then, apply the migrations by running the following command: `python manage.py migrate`. This will create the tables in the database and you can start using the models to interact with the database
+After defining your models, you need to create the database tables by running the following command: `python manage.py makemigrations`. Then, apply the migrations by running the following command: `python manage.py migrate`. This will create the tables in the database and you can start using the models to interact with the database.
+
+# Views in Django
+In Django, views are responsible for processing and handling HTTP requests and returning HTTP responses. They are Python functions or class-based views that take a web request and return a web response. They act as a controller in the Model-View-Template architecture pattern, where they fetch data from models and pass it to templates for rendering. A view can perform any logic, such as querying the database, processing forms, redirecting, and so on. The URL configuration maps URLs to views, allowing different URLs to execute different code.
+
+For example, in a blog application, you might have the following views:
+
+* Blog homepage – displays the latest few entries.
+* Entry “detail” page – permalink page for a single entry.
+* Year-based archive page – displays all months with entries in the given year.
+* Month-based archive page – displays all days with entries in the given month.
+* Day-based archive page – displays all entries in the given day.
+* Comment action – handles posting comments to a given entry.
+
+In our poll application, we’ll have the following four views:
+
+* Question “index” page – displays the latest few questions.
+* Question “detail” page – displays a question text, with no results but with a form to vote.
+* Question “results” page – displays results for a particular question.
+* Vote action – handles voting for a particular choice in a particular question.
+
