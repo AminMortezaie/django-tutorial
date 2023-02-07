@@ -250,7 +250,7 @@ urlpatterns = [
 ```
 With this configuration, the `/hello/ `URL will trigger the `hello_world` view, which will render the `hello_world.html` template.
 
-## Here's an example of how you can use middleware in Django views:
+## Here's an example of middleware in Django views:
 ```python
 from django.shortcuts import render
 
