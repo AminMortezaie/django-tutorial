@@ -231,7 +231,7 @@ In this example, the `hello_world` function uses the render shortcut to `render`
 
 * The `request` object, which represents the incoming HTTP request.
 * The name of the template file to be rendered, as a string.
-* A dictionary of context data that will be passed to the template. In this case, the dictionary contains a single key-value pair, where the key is '`message`' and the value is **'Hello, World!'**.
+* A dictionary of context data that will be passed to the template. In this case, the dictionary contains a single key-value pair, where the key is `message` and the value is **'Hello, World!'**.
 
 Here's an example of the `hello_world.html` template:
 ```html
