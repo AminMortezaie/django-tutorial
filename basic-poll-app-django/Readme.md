@@ -151,7 +151,27 @@ Here is the different types of Django views:
 * **Templates:** Views often pass data to templates, which are used to render HTML pages. Templates are separate from views and contain the presentation logic for a particular HTML page. The data passed from views to templates is commonly known as context data.
 * **Middleware:** Views can be modified by middleware, which is a series of hooks into the request/response processing. Middleware provides a way to execute code before or after the view and to modify the request or response.
 
-Overall, views are a critical part of the Django framework and provide the logic for processing and handling web requests.
+Here is a simple example of a **function-based** view in Django:
+
+```python
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def hello_world(request):
+    return HttpResponse("Hello, World!")
+```
+In this example, the `hello_world` function takes a single argument, the `request` object, which represents the incoming HTTP request. The function returns an `HttpResponse` object that contains the string _"Hello, World!"_.
+
+To map this view to a URL, you need to add the following to your `urls.py` file:
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('hello/', views.hello_world, name='hello_world'),
+]
+```
+In this example, the URL `/hello/` will trigger the `hello_world` view. The `name` argument is used to give the URL a name, which can be used to refer to the URL in other parts of the code, such as in template tags.
 
 For example, in a blog application, you might have the following views:
 
