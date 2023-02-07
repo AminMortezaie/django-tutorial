@@ -211,6 +211,15 @@ class HelloWorldView(View):
 ```
 In this example, the `HelloWorldView` class implements both the `get` and `post` methods. The `get` method returns a simple **"Hello, World!"** response, just like the previous example. The `post` method returns a slightly different response to indicate that the request was a `POST` request.
 
+To map this view to a URL, you can use the same URL configuration as in the previous example:
+```python
+from django.urls import path
+from .views import HelloWorldView
+
+urlpatterns = [
+    path('hello/', HelloWorldView.as_view(), name='hello_world'),
+]
+```
 
 For example, in a blog application, you might have the following views:
 
