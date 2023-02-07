@@ -250,6 +250,48 @@ urlpatterns = [
 ```
 With this configuration, the `/hello/ `URL will trigger the `hello_world` view, which will render the `hello_world.html` template.
 
+## Here's an example of how you can use middleware in Django views:
+```python
+from django.shortcuts import render
+
+def hello_world(request):
+    # Do something with the request, such as modifying request.GET
+    # or request.POST, or adding custom attributes to the request.
+    request.custom_attribute = "Hello, World!"
+    
+    return render(request, 'hello_world.html', {'message': 'Hello, World!'})
+```
+In this example, the `hello_world` view adds a custom attribute to the `request` object, which could be used later in the request-response cycle, for example in middleware.
+
+Here's an example of a custom middleware class that can access the custom attribute added by the view:
+```python
+class CustomMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Access the custom attribute added by the view.
+        message = request.custom_attribute
+        
+        response = self.get_response(request)
+        
+        # Do something with the response, such as modifying the response.
+        response['X-Custom-Header'] = message
+        
+        return response
+```
+In this example, the `CustomMiddleware` class takes a `get_response` function as an argument in the `__init__` method, which it stores as an instance variable. The `__call__` method is then used to define the middleware's behavior. In this case, the middleware accesses the custom attribute added by the view, and adds a custom header to the response using the `response['X-Custom-Header']` syntax.
+
+To use this `middleware`, you need to add it to the MIDDLEWARE setting in your Django project's `settings.py` file:
+```python
+MIDDLEWARE = [
+    # ...
+    'path.to.CustomMiddleware',
+    # ...
+]
+```
+With this configuration, the `CustomMiddleware` class will be executed for every request-response cycle, and will have access to the custom attribute added by the view.
+
 ## Examples of Views in different apps
 For example, in a blog application, you might have the following views:
 
