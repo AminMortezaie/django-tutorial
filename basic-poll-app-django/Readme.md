@@ -173,7 +173,7 @@ urlpatterns = [
 ```
 In this example, the URL `/hello/` will trigger the `hello_world` view. The `name` argument is used to give the URL a name, which can be used to refer to the URL in other parts of the code, such as in template tags.
 
-Here's an example of a class-based view in Django:
+#### Here's an example of a class-based view in Django:
 ```python
 from django.views import View
 from django.http import HttpResponse
@@ -182,7 +182,8 @@ class HelloWorldView(View):
     def get(self, request, *args, **kwargs):
         return HttpResponse("Hello, World!")
 ```
-Here's an example of a **class-based** view in Django:
+
+#### Here's an example of a **class-based** view in Django:
 ```python
 from django.views import View
 from django.http import HttpResponse
