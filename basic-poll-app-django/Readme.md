@@ -196,6 +196,21 @@ urlpatterns = [
 ```
 In this example, the URL `/hello/` will trigger the `HelloWorldView` class. The `as_view` method returns a callable that can be passed to the `path` function, just like a function-based view. The `name` argument is used to give the URL a name, which can be used to refer to the URL in other parts of the code, such as in template tags.
 
+### Here's an example of a class-based view in Django that implements different HTTP methods:
+
+```python
+from django.views import View
+from django.http import HttpResponse
+
+class HelloWorldView(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse("Hello, World!")
+    
+    def post(self, request, *args, **kwargs):
+        return HttpResponse("Hello, World! You made a POST request.")
+```
+In this example, the `HelloWorldView` class implements both the `get` and `post` methods. The `get` method returns a simple **"Hello, World!"** response, just like the previous example. The `post` method returns a slightly different response to indicate that the request was a `POST` request.
+
 
 For example, in a blog application, you might have the following views:
 
