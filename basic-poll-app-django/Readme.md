@@ -250,6 +250,7 @@ urlpatterns = [
 ```
 With this configuration, the `/hello/ `URL will trigger the `hello_world` view, which will render the `hello_world.html` template.
 
+## Examples of Views in different apps
 For example, in a blog application, you might have the following views:
 
 * Blog homepage – displays the latest few entries.
