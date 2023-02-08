@@ -321,3 +321,22 @@ Within the `templates` directory you have just created, create another directory
 ### Template namespacing
 Now we might be able to get away with putting our templates directly in `polls/templates` (rather than creating another `polls` subdirectory), but it would actually be a bad idea. Django will choose the first template it finds whose name matches, and if you had a template with the same name in a different application, Django would be unable to distinguish between them. We need to be able to point Django at the right one, and the best way to ensure this is by namespacing them. That is, by putting those templates inside another directory named for the application itself.
 
+# A shortcut: `render()`
+`render()` is a shortcut function in Django that combines a template and a context to produce a complete HTML page. It is defined in the `django.shortcuts` module.
+
+The `render()` function takes three arguments:
+
+* The `request` object, which represents the incoming HTTP request.
+* The name of the template file to be rendered, as a string.
+* A dictionary of context data that will be passed to the template. This dictionary contains the variables that will be available in the template, and their values.
+
+Here's an example of how you can use `render()` in a Django view:
+```python
+from django.shortcuts import render
+
+def hello_world(request):
+    return render(request, 'hello_world.html', {'message': 'Hello, World!'})
+```
+In this example, the `hello_world` view uses the `render()` function to render a template called `hello_world.html`. The `render()` function takes the `request` object, the name of the template file, and a context dictionary containing a single key-value pair, where the key is `message` and the value is `Hello, World!`.
+
+The `render()` function returns a `HttpResponse` object that contains the complete HTML page, which can then be returned by the view to be sent to the client.
