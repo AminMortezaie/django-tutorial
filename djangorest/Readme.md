@@ -57,3 +57,4 @@ Other attributes that can be included in the Meta class include:
 * `read_only_fields`: A list of fields that should be serialized as read-only. These fields will be included in serialized data, but will be ignored during deserialization.
 * `write_only_fields`: A list of fields that should be serialized as write-only. These fields will be included in deserialized data, but will be ignored during serialization.
 
+The `Meta` class is an important part of a Django Rest Framework serializer, as it provides a way to specify the model and fields to be used, as well as other options that affect the behavior of the serializer.
