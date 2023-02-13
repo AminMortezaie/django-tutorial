@@ -100,3 +100,9 @@ The code field uses a different HTML template when being rendered in the API bro
 The `create` and `update` methods allow you to customize how instances of the `Snippet` model are created and updated using this serializer. The `create` method takes the validated data and creates a new `Snippet` instance using the `Snippet.objects.create` method. The `update` method updates an existing `Snippet` instance with the validated data.
 
 To use the serializer, you would first instantiate it and pass in the data you want to serialize or deserialize. Then, you can call the `.is_valid()` method to validate the data before serializing or deserializing it, and access the serialized or deserialized data using the `.data` or `.validated_data` attributes, respectively.
+### Validated_data and Instance
+`validated_data` is the data that has been validated and cleaned up by the serializer. This data is typically the result of deserializing incoming request data, such as data submitted through an API call. The serializer's `.validate` method is used to validate the data, and if the data is valid, it is stored in the `validated_data` attribute, which is a dictionary-like object that can be used to update or create instances of the model.
+
+`instance` is a model instance that is being updated by the serializer. For example, if the serializer is being used to update an existing model instance, the instance would be passed to the `update` method of the serializer as an argument. The instance would then be updated with the data in `validated_data`, and the updated instance would be returned.
+
+In short, `validated_data` contains the data to be used for creating or updating a model instance, and `instance` is the model instance being updated.
