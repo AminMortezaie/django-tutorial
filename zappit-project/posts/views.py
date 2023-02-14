@@ -17,7 +17,7 @@ class PostList(generics.ListCreateAPIView):
 class PostRetrieveDestroy(generics.RetrieveDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def delete(self, request, *args, **kwargs):
         post = Post.objects.filter(pk=kwargs['pk'], poster=self.request.user)
