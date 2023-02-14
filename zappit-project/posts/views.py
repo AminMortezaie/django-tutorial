@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import generics, permissions, mixins
 from rest_framework.exceptions import ValidationError
 from rest_framework.mixins import Response, status
@@ -13,6 +12,20 @@ class PostList(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(poster=self.request.user)
+
+
+class PostRetrieveDestroy(generics.RetrieveDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, *args, **kwargs):
+        post = Post.objects.filter(pk=kwargs['pk'], poster=self.request.user)
+        if post.exists():
+            self.destroy(request, *args, **kwargs)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            raise ValidationError("You have no access to this operation.")
 
 
 class VoteCreate(generics.CreateAPIView, mixins.DestroyModelMixin):
