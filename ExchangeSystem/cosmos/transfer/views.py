@@ -29,13 +29,16 @@ class SenderWalletList(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
-        # sender_wallet = SenderWalletSerializer.objects.get(pk=self.kwargs['pk'])
-        # print(sender_wallet)
-        # serializer.save(sender_wallet.seed)
+        sender_wallet = SenderWalletSerializer(data=self.request.data)
+        if sender_wallet.is_valid():
+            seed = sender_wallet.data['seed']
+            # bip32_bytes = bitcoin.bip32_key_from_string(seed)
+            # seed = base64.b64encode(bip32_bytes)
+            # serializer.save(private_key=self.private_key_from_seed(seed))
 
-    def private_key_from_seed(self):
+    def private_key_from_seed(self, seed):
         try:
-            private_key = seed_to_privkey(self.request.seed, path="m/44'/118'/0'/0/0")
+            private_key = seed_to_privkey(seed, path="m/44'/118'/0'/0/0")
             return private_key
         except BIP32DerivationError:
             raise ValidationError("Your seed is not correct.")

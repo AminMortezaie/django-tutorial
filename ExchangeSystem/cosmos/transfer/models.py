@@ -6,7 +6,7 @@ class SenderWallet(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     from_address = models.CharField(max_length=100)
     seed = models.CharField(max_length=300)
-    private_key = models.CharField(max_length=300)
+    private_key = models.BinaryField()
     account_number = models.IntegerField(default=0)
     sequence = models.IntegerField(default=0)
     memo = models.CharField(max_length=100)
