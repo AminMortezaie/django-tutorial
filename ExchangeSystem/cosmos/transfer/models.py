@@ -9,7 +9,7 @@ class SenderWallet(models.Model):
     private_key = models.BinaryField()
     account_number = models.IntegerField(default=0)
     sequence = models.IntegerField(default=0)
-    memo = models.CharField(max_length=100)
+    memo = models.CharField(max_length=100, default='')
 
 
 class ReceiverWallet(models.Model):
