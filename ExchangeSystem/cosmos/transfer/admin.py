@@ -1,7 +1,5 @@
 from django.contrib import admin
-from .models import SenderWallet
-from .models import ReceiverWallet
-from .models import CreateTransaction
+from .models import SenderWallet, ReceiverWallet, CreateTransaction
 
 
 admin.site.register(SenderWallet)

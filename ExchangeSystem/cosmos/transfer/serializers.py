@@ -17,7 +17,7 @@ class SenderWalletSerializer(serializers.ModelSerializer):
 class ReceiverWalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReceiverWallet
-        fields = ['id', 'to_address']
+        fields = ['id', 'to_address', 'tag']
 
 
 class CreateTransactionSerializer(serializers.ModelSerializer):

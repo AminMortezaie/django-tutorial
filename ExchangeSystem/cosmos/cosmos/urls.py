@@ -19,7 +19,9 @@ from transfer import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/sender-wallet/', views.SenderWalletList.as_view()),
+    path('api/sender-wallets/', views.SenderWalletList.as_view()),
     path('api/sender-wallet/<int:pk>/', views.SenderWalletObject.as_view()),
+    path('api/receiver-wallets/', views.ReceiverWalletList.as_view()),
+    path('api/receiver-wallet/<int:pk>/', views.ReceiverWalletObject.as_view()),
     path('api-auth/', include('rest_framework.urls'))
 ]

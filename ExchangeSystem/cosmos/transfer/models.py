@@ -14,6 +14,7 @@ class SenderWallet(models.Model):
 
 class ReceiverWallet(models.Model):
     to_address = models.CharField(max_length=100)
+    tag = models.CharField(max_length=100, default='')
 
 
 class CreateTransaction(models.Model):
