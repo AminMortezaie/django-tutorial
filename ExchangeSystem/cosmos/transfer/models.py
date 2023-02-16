@@ -26,8 +26,9 @@ class CreateTransaction(models.Model):
     chain_id = models.CharField(max_length=100, default="cosmoshub-4")
 
 
-class PushableTransaction(models.Model):
-    pass
+class PushedTransaction(models.Model):
+    create_transaction = models.ForeignKey(CreateTransaction, on_delete=models.CASCADE)
+    response = models.CharField(max_length=100, default='pending')
 
 
 

@@ -21,6 +21,9 @@ class ReceiverWalletSerializer(serializers.ModelSerializer):
 
 
 class CreateTransactionSerializer(serializers.ModelSerializer):
+    sync_mode = serializers.ReadOnlyField()
+    chain_id = serializers.ReadOnlyField()
+
     class Meta:
         model = CreateTransaction
         fields = ['id', 'from_address', 'to_address', 'gas', 'amount', 'sync_mode', 'chain_id']

@@ -42,3 +42,9 @@ class ReceiverWalletObject(generics.RetrieveDestroyAPIView):
     queryset = ReceiverWallet.objects.all()
     serializer_class = ReceiverWalletSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class CreateTransactionsList(generics.ListCreateAPIView):
+    queryset = CreateTransaction.objects.all()
+    serializer_class = CreateTransactionSerializer
+    permission_classes = [permissions.IsAuthenticated]
