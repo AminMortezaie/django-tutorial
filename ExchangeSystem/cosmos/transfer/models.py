@@ -9,12 +9,12 @@ class SenderWallet(models.Model):
     private_key = models.BinaryField()
     account_number = models.IntegerField(default=0)
     sequence = models.IntegerField(default=0)
-    memo = models.CharField(max_length=100, default='')
 
 
 class ReceiverWallet(models.Model):
     to_address = models.CharField(max_length=100)
     tag = models.CharField(max_length=100, default='')
+    memo = models.CharField(max_length=100, default='')
 
 
 class CreateTransaction(models.Model):
@@ -26,7 +26,7 @@ class CreateTransaction(models.Model):
     chain_id = models.CharField(max_length=100, default="cosmoshub-4")
 
 
-class PushedTransaction(models.Model):
+class PublishTransaction(models.Model):
     create_transaction = models.ForeignKey(CreateTransaction, on_delete=models.CASCADE)
     response = models.CharField(max_length=100, default='pending')
 

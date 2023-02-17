@@ -1,7 +1,5 @@
 from rest_framework import serializers
-from .models import SenderWallet
-from .models import ReceiverWallet
-from .models import CreateTransaction
+from .models import SenderWallet, ReceiverWallet, CreateTransaction, PublishTransaction
 
 
 class SenderWalletSerializer(serializers.ModelSerializer):
@@ -11,13 +9,13 @@ class SenderWalletSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SenderWallet
-        fields = ['id', 'user', 'user_id', 'from_address', 'seed', 'private_key', 'account_number', 'sequence', 'memo']
+        fields = ['id', 'user', 'user_id', 'from_address', 'seed', 'private_key', 'account_number', 'sequence']
 
 
 class ReceiverWalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReceiverWallet
-        fields = ['id', 'to_address', 'tag']
+        fields = ['id', 'to_address', 'memo', 'tag']
 
 
 class CreateTransactionSerializer(serializers.ModelSerializer):
@@ -27,3 +25,11 @@ class CreateTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CreateTransaction
         fields = ['id', 'from_address', 'to_address', 'gas', 'amount', 'sync_mode', 'chain_id']
+
+
+class PublishTransactionSerializer(serializers.ModelSerializer):
+    response = serializers.ReadOnlyField()
+
+    class Meta:
+        model = PublishTransaction
+        fields = ['id', 'create_transaction', 'response']
