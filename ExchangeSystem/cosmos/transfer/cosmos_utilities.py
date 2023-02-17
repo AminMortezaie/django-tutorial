@@ -3,7 +3,6 @@ from cosmospy import Transaction
 
 
 base_url = "https://atom.getblock.io/"
-api_key = "382d1202-34e8-4b4f-b458-f37df1bff346"
 
 
 class CosmospyUtilities:
