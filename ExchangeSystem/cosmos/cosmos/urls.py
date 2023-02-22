@@ -40,9 +40,7 @@ urlpatterns = [
     path('api/sender-wallets/<int:pk>/', views.SenderWalletObject.as_view()),
     path('api/receiver-wallets/', views.ReceiverWalletList.as_view()),
     path('api/receiver-wallets/<int:pk>/', views.ReceiverWalletObject.as_view()),
-    path('api/create-transactions/', views.CreateTransactionsList.as_view()),
-    path('api/create-transactions/<int:pk>/', views.CreateTransactionObject.as_view()),
-    path('api/transactions/', views.TransactionsList.as_view()),
-    path('api/transactions/<int:pk>', views.TransactionObject.as_view()),
+    path('api/transactions/', views.CreateTransactionsList.as_view()),
+    path('api/transactions/<int:pk>/', views.CreateTransactionObject.as_view()),
     path('api-auth/', include('rest_framework.urls')),
 ]
