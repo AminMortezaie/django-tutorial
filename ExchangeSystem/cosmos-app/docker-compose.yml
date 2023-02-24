@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  ts:
+    build:
+      context: .
+      dockerfile: Dockerfile-ts
+    ports:
+      - "3000:3000"
+    networks:
+      - my-network
+  web:
+    build: .
+    command: python /code/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    networks:
+      - my-network
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    networks:
+      - my-network
+volumes:
+  postgres_data:
+
+networks:
+    my-network:

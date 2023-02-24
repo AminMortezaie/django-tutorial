@@ -54,7 +54,7 @@ class CreateTransactionsList(generics.ListCreateAPIView):
         headers = {'Content-Type': 'application/json'}
         print("data", data)
         json_data = json.dumps(data)
-        response = requests.post('http://localhost:3000/api/broadcast-transaction/', data=json_data, headers=headers)
+        response = requests.post('http://ts:3000/api/broadcast-transaction/', data=json_data, headers=headers)
         if response.status_code == 201:
             data = response.json()
             return data['message']['transactionHash']
