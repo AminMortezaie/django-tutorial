@@ -1,14 +1,26 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
 from .models import SenderWallet, ReceiverWallet, CreateTransaction
 from .serializers import SenderWalletSerializer, ReceiverWalletSerializer, CreateTransactionSerializer
 import requests
 import json
+from django.core.cache import cache
 
 
 class SenderWalletObject(generics.RetrieveDestroyAPIView):
     queryset = SenderWallet.objects.all()
     serializer_class = SenderWalletSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        cache_key = f'sender_wallet_{self.kwargs["pk"]}'
+        sender_wallet = cache.get(cache_key)
+
+        if not sender_wallet:
+            sender_wallet = get_object_or_404(SenderWallet, pk=self.kwargs['pk'])
+            cache.set(cache_key, sender_wallet)
+
+        return sender_wallet
 
 
 class SenderWalletList(generics.ListCreateAPIView):
@@ -25,11 +37,32 @@ class ReceiverWalletList(generics.ListCreateAPIView):
     serializer_class = ReceiverWalletSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        queryset = ReceiverWallet.objects.all()
+        cache_key = 'receiver_wallets'
+
+        receiver_wallets = cache.get(cache_key)
+        if not receiver_wallets:
+            receiver_wallets = list(queryset)
+            cache.set(cache_key, receiver_wallets)
+
+        return receiver_wallets
+
 
 class ReceiverWalletObject(generics.RetrieveDestroyAPIView):
     queryset = ReceiverWallet.objects.all()
     serializer_class = ReceiverWalletSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        cache_key = f'receiver_wallet_{self.kwargs["pk"]}'
+        receiver_wallet = cache.get(cache_key)
+
+        if not receiver_wallet:
+            receiver_wallet = get_object_or_404(ReceiverWallet, pk=self.kwargs['pk'])
+            cache.set(cache_key, receiver_wallet)
+
+        return receiver_wallet
 
 
 class CreateTransactionsList(generics.ListCreateAPIView):
