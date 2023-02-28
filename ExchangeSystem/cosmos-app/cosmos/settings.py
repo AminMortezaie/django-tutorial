@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'transfer',
     'drf_yasg',
+    'cardano'
 ]
 
 MIDDLEWARE = [

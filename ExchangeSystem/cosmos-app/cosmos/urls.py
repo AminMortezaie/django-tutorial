@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from transfer import views
+from cardano import views as cardano_views
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
@@ -30,6 +31,7 @@ schema_view = get_schema_view(
     permission_classes=([permissions.AllowAny]),
 )
 
+
 urlpatterns = [
     path('doc/', schema_view.with_ui('swagger', cache_timeout=0),
          name='schema-swagger-ui'),  # <-- Here
@@ -42,5 +44,13 @@ urlpatterns = [
     path('api/cosmos-receiver-wallets/<int:pk>/', views.ReceiverWalletObject.as_view()),
     path('api/cosmos-transactions/', views.CreateTransactionsList.as_view()),
     path('api/cosmos-transactions/<int:pk>/', views.CreateTransactionObject.as_view()),
+
+    path('api/cardano-sender-wallets/', cardano_views.CardanoSenderWalletList.as_view()),
+    path('api/cardano-sender-wallets/<int:pk>/', cardano_views.CardanoSenderWalletObject.as_view()),
+    path('api/cardano-receiver-wallets/', cardano_views.CardanoReceiverWalletList.as_view()),
+    path('api/cardano-receiver-wallets/<int:pk>/', cardano_views.CardanoReceiverWalletObject.as_view()),
+    path('api/cardano-transactions/', cardano_views.CardanoCreateTransactionsList.as_view()),
+    path('api/cardano-transactions/<int:pk>/', cardano_views.CardanoCreateTransactionObject.as_view()),
+
     path('api-auth/', include('rest_framework.urls')),
 ]
