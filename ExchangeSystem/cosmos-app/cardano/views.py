@@ -1,15 +1,15 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
 from .models import CardanoSenderWallet, CardanoReceiverWallet, CardanoCreateTransaction
-from .serializers import CardanoSenderWalletSerializer, CardanoReceiverWalletSerializer, CardanoCreateTransactionSerializer
-import requests
+from .serializers import CardanoSenderWalletCreateSerializer, CardanoSenderWalletRetrieveSerializer, CardanoReceiverWalletSerializer, CardanoCreateTransactionSerializer
+from .broadcast_transaction import submit_transaction
 import json
 from django.core.cache import cache
 
 
 class CardanoSenderWalletObject(generics.RetrieveDestroyAPIView):
     queryset = CardanoSenderWallet.objects.all()
-    serializer_class = CardanoSenderWalletSerializer
+    serializer_class = CardanoSenderWalletRetrieveSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
@@ -25,8 +25,13 @@ class CardanoSenderWalletObject(generics.RetrieveDestroyAPIView):
 
 class CardanoSenderWalletList(generics.ListCreateAPIView):
     queryset = CardanoSenderWallet.objects.all()
-    serializer_class = CardanoSenderWalletSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return CardanoSenderWalletCreateSerializer
+        else:
+            return CardanoSenderWalletRetrieveSerializer
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
@@ -71,17 +76,20 @@ class CardanoCreateTransactionsList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        # transaction_hash = self.get_response_from_transfer_request(serializer.validated_data)
-        # serializer.save(transaction_hash=transaction_hash, transaction_link="https://preview.cexplorer.io/tx/"+transaction_hash)
-        print(self.get_values(serializer.validated_data))
-        serializer.save(transaction_hash='', transaction_link='')
+        transaction_hash = self.get_transaction_hash(serializer.validated_data)
+        serializer.save(transaction_hash=transaction_hash, transaction_link="https://preview.cexplorer.io/tx/"+transaction_hash)
 
     def get_values(self, transaction):
         sender_wallet = transaction['from_address']
         receiver_wallet = transaction['to_address']
 
         return {'from_address': sender_wallet.from_address,
-                "singing_key": sender_wallet.signing_key, "to_address": receiver_wallet.to_address, "amount": transaction['amount']}
+                "signing_key": sender_wallet.signing_key, "to_address": receiver_wallet.to_address, "amount": transaction['amount']}
+
+    def get_transaction_hash(self, transaction):
+        response = self.get_values(transaction)
+        print("Values Successfully Gathered.")
+        return submit_transaction(response["from_address"], response["to_address"], response["amount"], json.dumps(response["signing_key"]))
 
 
 class CardanoCreateTransactionObject(generics.RetrieveDestroyAPIView):

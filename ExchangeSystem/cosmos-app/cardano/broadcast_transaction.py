@@ -1,5 +1,4 @@
-from pycardano import Address, PaymentSigningKey, TransactionBuilder, \
-    TransactionOutput, BlockFrostChainContext, Network
+from pycardano import *
 from blockfrost import ApiUrls
 import time
 
@@ -7,22 +6,21 @@ api_key = "previewMT8Y2EIRVvxtKL2Fm14WLue6T6Yo0qSe"
 network = Network.TESTNET
 context = BlockFrostChainContext(api_key, network, base_url=ApiUrls.preview.value)
 
-# address_from = 'addr_test1vpsyzxs6jej64s4pvhzjt0c4vuze873yx4cwecmjxpdukdsxlf9eg'
-# sk_path = 'payment.skey'
-# address_to = 'addr_test1vzhplqgqgkds2q6p3ud0ps9gqvas8qnjl7guea0zrj6h6tgtrhl6h'
-
 
 def submit_transaction(address_from, address_to, amount, signing_key):
-    amount = amount * 10**9
+    amount = float(amount) * 1000000000
     payment_signing_key = PaymentSigningKey.from_json(signing_key)
     tx_builder = TransactionBuilder(context)
+    print("tx_builder 1")
     tx_builder.add_input_address(address_from)
-    tx_builder.add_output(TransactionOutput.from_primitive([address_to, amount]))
+    print("tx_builder 2")
+    tx_builder.add_output(TransactionOutput.from_primitive([address_to, int(amount)]))
+    print("tx_builder 3")
     signed_tx = tx_builder.build_and_sign([payment_signing_key], change_address=Address.from_primitive(address_from))
     context.submit_tx(signed_tx.to_cbor())
     print(context)
     time.sleep(50)
-    print(get_transaction_hash(address_from))
+    return get_transaction_hash(address_from)
 
 
 def get_transaction_hash(address_from):
@@ -33,4 +31,9 @@ def get_transaction_hash(address_from):
             return item.split("(")[1].split('hex=')[1].split('\'')[1]
 
 
-submit_transaction()
+def generate_wallet():
+    payment_signing_key = PaymentSigningKey.generate()
+    payment_verification_key = PaymentVerificationKey.from_signing_key(payment_signing_key)
+    enterprise_address = Address(payment_part=payment_verification_key.hash(),
+                                 network=Network.TESTNET)
+    return enterprise_address, payment_signing_key

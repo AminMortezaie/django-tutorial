@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
 from .models import SenderWallet, ReceiverWallet, CreateTransaction
-from .serializers import SenderWalletSerializer, ReceiverWalletSerializer, CreateTransactionSerializer
+from .serializers import SenderWalletCreateSerializer, SenderWalletRetrieveSerializer,  ReceiverWalletSerializer, CreateTransactionSerializer
 import requests
 import json
 from django.core.cache import cache
@@ -9,7 +9,7 @@ from django.core.cache import cache
 
 class SenderWalletObject(generics.RetrieveDestroyAPIView):
     queryset = SenderWallet.objects.all()
-    serializer_class = SenderWalletSerializer
+    serializer_class = SenderWalletRetrieveSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
@@ -25,8 +25,13 @@ class SenderWalletObject(generics.RetrieveDestroyAPIView):
 
 class SenderWalletList(generics.ListCreateAPIView):
     queryset = SenderWallet.objects.all()
-    serializer_class = SenderWalletSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return SenderWalletCreateSerializer
+        else:
+            return SenderWalletRetrieveSerializer
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)

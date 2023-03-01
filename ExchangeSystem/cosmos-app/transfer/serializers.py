@@ -2,13 +2,19 @@ from rest_framework import serializers
 from .models import SenderWallet, ReceiverWallet, CreateTransaction
 
 
-class SenderWalletSerializer(serializers.ModelSerializer):
+class SenderWalletCreateSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='creator.username')
     user_id = serializers.ReadOnlyField(source='creator.id')
 
     class Meta:
         model = SenderWallet
         fields = ['id', 'user', 'user_id', 'from_address', 'seed']
+
+
+class SenderWalletRetrieveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SenderWallet
+        exclude = ('seed',)
 
 
 class ReceiverWalletSerializer(serializers.ModelSerializer):

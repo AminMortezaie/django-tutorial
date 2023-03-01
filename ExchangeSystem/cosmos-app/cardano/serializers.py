@@ -2,13 +2,23 @@ from rest_framework import serializers
 from .models import CardanoSenderWallet, CardanoReceiverWallet, CardanoCreateTransaction
 
 
-class CardanoSenderWalletSerializer(serializers.ModelSerializer):
+class CardanoSenderWalletCreateSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='creator.username')
     user_id = serializers.ReadOnlyField(source='creator.id')
 
     class Meta:
         model = CardanoSenderWallet
         fields = ['id', 'user', 'user_id', 'from_address', 'signing_key']
+
+
+class CardanoSenderWalletRetrieveSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='creator.username')
+    user_id = serializers.ReadOnlyField(source='creator.id')
+
+    class Meta:
+        model = CardanoSenderWallet
+        exclude = ('signing_key', )
+
 
 
 class CardanoReceiverWalletSerializer(serializers.ModelSerializer):
