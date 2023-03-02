@@ -5,7 +5,8 @@ import {Transaction} from "./index.js"
 import { DirectSecp256k1HdWallet, OfflineDirectSigner } from "@cosmjs/proto-signing"
 
 
-const rpc = "rpc.sentry-01.theta-testnet.polypore.xyz:26657"
+// const rpc = "https://cosmos-mainnet-rpc.allthatnode.com:26657" //mainnet
+const rpc = "rpc.sentry-01.theta-testnet.polypore.xyz:26657" //testnet
 
 
 const getFromAddressSignerFromMnemonic = async (seed:string): Promise<OfflineDirectSigner> => {
@@ -27,12 +28,12 @@ const runAll = async(transaction: Transaction): Promise<DeliverTxResponse> => {
     console.log("With client, chain id:", await client.getChainId(), ", height:", await client.getHeight())
 
     
-    const faucetTx: IndexedTx = (await client.getTx(
-        "A1D7733898BFC29DB13672DF03C065EA5F2DF3ABC3C06E427FB114CB05E7D901",
-    ))!
-    const decodedTx: Tx = Tx.decode(faucetTx.tx)
-    const sendMessage: MsgSend = MsgSend.decode(decodedTx.body!.messages[0].value)
-    console.log("Sent message:", sendMessage)
+    // const faucetTx: IndexedTx = (await client.getTx(
+    //     "A1D7733898BFC29DB13672DF03C065EA5F2DF3ABC3C06E427FB114CB05E7D901",
+    // ))!
+    // const decodedTx: Tx = Tx.decode(faucetTx.tx)
+    // const sendMessage: MsgSend = MsgSend.decode(decodedTx.body!.messages[0].value)
+    // console.log("Sent message:", sendMessage)
 
     
     const fromAddressSigner: OfflineDirectSigner = await getFromAddressSignerFromMnemonic(seed)
@@ -48,8 +49,8 @@ const runAll = async(transaction: Transaction): Promise<DeliverTxResponse> => {
     )
     
     
-    console.log("Gas fee:", decodedTx.authInfo!.fee!.amount)
-    console.log("Gas limit:", decodedTx.authInfo!.fee!.gasLimit.toString(10))
+    // console.log("Gas fee:", decodedTx.authInfo!.fee!.amount)
+    // console.log("Gas limit:", decodedTx.authInfo!.fee!.gasLimit.toString(10))
 
 
     // Check the balance of Alice and the Faucet
