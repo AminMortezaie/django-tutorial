@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import CardanoSenderWallet, CardanoReceiverWallet, CardanoCreateTransaction
 
-# Register your models here.
+
+admin.site.register(CardanoSenderWallet)
+admin.site.register(CardanoReceiverWallet)
+admin.site.register(CardanoCreateTransaction)
