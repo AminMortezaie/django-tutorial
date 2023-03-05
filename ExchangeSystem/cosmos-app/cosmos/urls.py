@@ -17,9 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 from transfer import views
 from cardano import views as cardano_views
+from withdraw import views as withdraw_views
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -52,5 +58,16 @@ urlpatterns = [
     path('api/cardano-transactions/', cardano_views.CardanoCreateTransactionsList.as_view()),
     path('api/cardano-transactions/<int:pk>/', cardano_views.CardanoCreateTransactionObject.as_view()),
 
+    path('api/sender-wallets/', withdraw_views.AllSenderWalletsList.as_view()),
+    path('api/sender-wallets/<int:pk>', withdraw_views.AllSenderWalletObject.as_view()),
+    path('api/receiver-wallets/', withdraw_views.AllReceiverWalletsList.as_view()),
+    path('api/receiver-wallets/<int:pk>/', withdraw_views.AllReceiverWalletObject.as_view()),
+    path('api/transactions/', withdraw_views.AllCreateTransactionsList.as_view()),
+    path('api/transactions/<int:pk>/', withdraw_views.AllCreateTransactionObject.as_view()),
+
     path('api-auth/', include('rest_framework.urls')),
+
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]

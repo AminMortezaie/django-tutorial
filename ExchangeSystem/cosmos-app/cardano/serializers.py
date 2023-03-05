@@ -20,7 +20,6 @@ class CardanoSenderWalletRetrieveSerializer(serializers.ModelSerializer):
         exclude = ('signing_key', )
 
 
-
 class CardanoReceiverWalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = CardanoReceiverWallet
