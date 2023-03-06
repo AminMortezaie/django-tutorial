@@ -6,6 +6,7 @@ from .broadcast_transaction import submit_transaction
 import json
 from django.core.cache import cache
 import requests
+import hashlib
 
 
 class AllSenderWalletObject(generics.RetrieveDestroyAPIView):
@@ -72,36 +73,63 @@ class AllCreateTransactionsList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
+        transaction_hash = 'No Transaction Accomplished.'
+        data = dict(serializer.validated_data)
+        sender_wallet = AllSenderWallet.objects.filter(from_address=data['sender_address'])[0]
+        receiver_wallet = AllReceiverWallet.objects.filter(to_address=data['receiver_address'])[0]
+        receiver_wallet_data = {'to_address': receiver_wallet.to_address, 'network': receiver_wallet.network,
+                                'memo': receiver_wallet.memo}
+
         if serializer.validated_data['network'] == 'cardano':
-            transaction_hash = self.cardano_get_transaction_hash(serializer.validated_data)
-            serializer.save(transaction_hash=transaction_hash)
+            sender_wallet_data = {'from_address': sender_wallet.from_address, 'network': sender_wallet.network,
+                                  'private_key': sender_wallet.private_key}
+            data.update({'from_address': sender_wallet_data})
+            data.update({'from_address': sender_wallet_data, 'to_address': receiver_wallet_data})
+            transaction_hash = self.cardano_get_transaction_hash(data)
+
         elif serializer.validated_data['network'] == 'cosmos':
-            transaction_hash = self.cosmos_get_transaction_hash(serializer.validated_data)
-            serializer.save(transaction_hash=transaction_hash)
+            sender_wallet_data = {'from_address': sender_wallet.from_address, 'network': sender_wallet.network,
+                                  'seed': sender_wallet.private_key}
+            data.update({'from_address': sender_wallet_data})
+            data.update({'from_address': sender_wallet_data, 'to_address': receiver_wallet_data})
+            transaction_hash = self.cosmos_get_transaction_hash(data)
+
+        text = f"['{data['sender_address']}', '{data['receiver_address']}', '{data['amount']}'," \
+               f"'{data['symbol'].lower()}','{data['to_address']['memo']}','{data['network'].upper()}', " \
+               f"'{transaction_hash}']"
+
+        sample = text + data['midKey'] + str(data['timestamp']) + data['key']
+        sha256 = hashlib.sha256()
+        sha256.update(sample.encode())
+        hashed_value = sha256.hexdigest()
+        serializer.save(transaction_hash=hashed_value)
 
     def cardano_get_values(self, transaction):
         sender_wallet = transaction['from_address']
         receiver_wallet = transaction['to_address']
 
-        return {'from_address': sender_wallet.from_address,
-                "signing_key": sender_wallet.private_key, "to_address": receiver_wallet.to_address, "amount": transaction['amount']}
+        return {'from_address': sender_wallet['from_address'],
+                "signing_key": sender_wallet['private_key'], "to_address": receiver_wallet['to_address'],
+                "amount": transaction['amount']}
 
     def cardano_get_transaction_hash(self, transaction):
         response = self.cardano_get_values(transaction)
         print("Values Successfully Gathered.")
-        return submit_transaction(response["from_address"], response["to_address"], response["amount"], json.dumps(response["signing_key"]))
+        return submit_transaction(response["from_address"], response["to_address"], response["amount"],
+                                  json.dumps(response["signing_key"]))
 
     def cosmos_get_values(self, transaction):
         sender_wallet = transaction['from_address']
         receiver_wallet = transaction['to_address']
-        seed = sender_wallet.private_key['seed']
+        seed = sender_wallet['seed']['seed']
 
-        return {'from_address': sender_wallet.from_address,
-                "seed": seed, "to_address": receiver_wallet.to_address, "amount": transaction['amount']}
+        return {'from_address': sender_wallet['from_address'],
+                "seed": seed, "to_address": receiver_wallet['to_address'], "amount": transaction['amount']}
 
     def cosmos_get_transaction_hash(self, transaction):
         response = self.cosmos_get_values(transaction)
-        data = {"from_address": response["from_address"], "to_address": response["to_address"], "seed": response["seed"], "amount": response["amount"]}
+        data = {"from_address": response["from_address"], "to_address": response["to_address"],
+                "seed": response["seed"], "amount": response["amount"]}
         headers = {'Content-Type': 'application/json'}
         print("data", data)
         json_data = json.dumps(data)

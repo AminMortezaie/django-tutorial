@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.admin import User
-
+from datetime import datetime
 
 def get_empty_dict():
     return {}
@@ -22,15 +22,7 @@ class AllReceiverWallet(models.Model):
 
 
 class AllCreateTransaction(models.Model):
-    from_address = models.ForeignKey(AllSenderWallet, on_delete=models.CASCADE)
-    to_address = models.ForeignKey(AllReceiverWallet, on_delete=models.CASCADE)
-    amount = models.CharField(max_length=100, default='0')
     transaction_hash = models.CharField(max_length=500, default="rejected")
-    network = models.CharField(max_length=100, default='cardano')
-    symbol = models.CharField(max_length=50, default='ada')
-    midKey = models.CharField(max_length=100, default='')
-    key = models.CharField(max_length=100, default='')
-    timestamp = models.DateTimeField(auto_now_add=True)
 
 
 
