@@ -147,14 +147,15 @@ class AllCreateTransactionsList(generics.ListCreateAPIView):
         data = {"from_address": response["from_address"], "to_address": response["to_address"],
                 "seed": response["seed"], "amount": response["amount"]}
         headers = {'Content-Type': 'application/json'}
-        print("data", data)
         json_data = json.dumps(data)
         response = requests.post('http://ts:3000/api/broadcast-transaction/', data=json_data, headers=headers)
-        if response.status_code == 201:
-            data = response.json()
+        data = response.json()
+        if int(data['message']['code']) == 0 and response.status_code == 201:
             return data['message']['transactionHash']
+        elif int(data['message']['code']) == 5:
+            raise ValidationError("Your balance is insufficient.")
         else:
-            print('API request failed with status code', response.status_code)
+            raise ValidationError('API request failed with status code', response.status_code)
 
     def network_conflict_error(self, payload_network, second_network, network, symbol):
         if payload_network != second_network:
