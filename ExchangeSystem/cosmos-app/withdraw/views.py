@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
+from rest_framework.exceptions import ValidationError
 from .models import AllCreateTransaction, AllSenderWallet, AllReceiverWallet
 from .serializers import AllCreateTransactionSerializer, AllSenderWalletSerializer, AllReceiverWalletSerializer
 from .broadcast_transaction import submit_transaction
@@ -75,10 +76,21 @@ class AllCreateTransactionsList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         transaction_hash = 'No Transaction Accomplished.'
         data = dict(serializer.validated_data)
-        sender_wallet = AllSenderWallet.objects.filter(from_address=data['sender_address'])[0]
-        receiver_wallet = AllReceiverWallet.objects.filter(to_address=data['receiver_address'])[0]
+
+        try:
+            sender_wallet = AllSenderWallet.objects.filter(from_address=data['sender_address'])[0]
+        except:
+            raise ValidationError("This sender wallet is not Valid. You need to create a new sender wallet!")
+
+        try:
+            receiver_wallet = AllReceiverWallet.objects.filter(to_address=data['receiver_address'])[0]
+        except:
+            raise ValidationError("This receiver wallet is not Valid. You need to create a new receiver wallet!")
+
         receiver_wallet_data = {'to_address': receiver_wallet.to_address, 'network': receiver_wallet.network,
                                 'memo': receiver_wallet.memo}
+        payload_network = receiver_wallet_data['network']
+        self.network_conflict_error(payload_network, sender_wallet.network, data['network'], data['symbol'])
 
         if serializer.validated_data['network'] == 'cardano':
             sender_wallet_data = {'from_address': sender_wallet.from_address, 'network': sender_wallet.network,
@@ -115,8 +127,12 @@ class AllCreateTransactionsList(generics.ListCreateAPIView):
     def cardano_get_transaction_hash(self, transaction):
         response = self.cardano_get_values(transaction)
         print("Values Successfully Gathered.")
-        return submit_transaction(response["from_address"], response["to_address"], response["amount"],
-                                  json.dumps(response["signing_key"]))
+        tx_hash = submit_transaction(response["from_address"], response["to_address"], response["amount"],
+                                     json.dumps(response["signing_key"]))
+        if tx_hash == "Balance is insufficient!":
+            raise ValidationError("Your balance is insufficient.")
+        else:
+            return tx_hash
 
     def cosmos_get_values(self, transaction):
         sender_wallet = transaction['from_address']
@@ -139,6 +155,15 @@ class AllCreateTransactionsList(generics.ListCreateAPIView):
             return data['message']['transactionHash']
         else:
             print('API request failed with status code', response.status_code)
+
+    def network_conflict_error(self, payload_network, second_network, network, symbol):
+        if payload_network != second_network:
+            raise ValidationError("Sender and receiver networks are not the same.")
+        if network != payload_network:
+            raise ValidationError("You've entered wrong network.")
+        if (network == 'cosmos' and symbol != 'atom') or (network == 'cardano' and symbol != 'ada'):
+            raise ValidationError("You've entered wrong Symbol.")
+        return "no conflict detected."
 
 
 class AllCreateTransactionObject(generics.RetrieveDestroyAPIView):

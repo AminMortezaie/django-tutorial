@@ -3,9 +3,6 @@ from django.db import models
 from django.contrib.auth.admin import User
 from datetime import datetime
 
-def get_empty_dict():
-    return {}
-
 
 class AllSenderWallet(models.Model):
     creator = models.ForeignKey(User, default='', on_delete=models.CASCADE)
