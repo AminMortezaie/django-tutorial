@@ -16,6 +16,10 @@ class AllSenderWalletSerializer(serializers.ModelSerializer):
         model = AllSenderWallet
         fields = '__all__'
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        return {'id': data['id'], 'from_address': data['from_address'], 'network': data['network']}
+
 
 class AllCreateTransactionSerializer(serializers.ModelSerializer):
     transaction_hash = serializers.ReadOnlyField()
