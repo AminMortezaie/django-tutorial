@@ -25,6 +25,7 @@ def submit_transaction(address_from, address_to, amount, signing_key):
         return get_transaction_hash(address_from)
     return "Balance is insufficient!"
 
+
 def get_transaction_hash(address_from):
     print(context.utxos(str(address_from)))
     transaction_str = str(context.utxos(str(address_from))[0])
