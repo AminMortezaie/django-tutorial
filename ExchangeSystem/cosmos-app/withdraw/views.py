@@ -147,7 +147,7 @@ class AllCreateTransactionsList(generics.ListCreateAPIView):
     def cosmos_get_transaction_hash(self, transaction):
         response = self.cosmos_get_values(transaction)
         data = {"from_address": response["from_address"], "to_address": response["to_address"],
-                "seed": response["seed"], "amount": response["amount"]}
+                "seed": response["seed"], "amount": response["amount"], "memo": response["memo"]}
         headers = {'Content-Type': 'application/json'}
         json_data = json.dumps(data)
         print(data)
