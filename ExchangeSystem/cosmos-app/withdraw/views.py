@@ -139,9 +139,10 @@ class AllCreateTransactionsList(generics.ListCreateAPIView):
         sender_wallet = transaction['from_address']
         receiver_wallet = transaction['to_address']
         seed = sender_wallet['seed']['seed']
+        memo = receiver_wallet['memo']
 
         return {'from_address': sender_wallet['from_address'],
-                "seed": seed, "to_address": receiver_wallet['to_address'], "amount": transaction['amount']}
+                "seed": seed, "to_address": receiver_wallet['to_address'], "memo": memo, "amount": transaction['amount']}
 
     def cosmos_get_transaction_hash(self, transaction):
         response = self.cosmos_get_values(transaction)
