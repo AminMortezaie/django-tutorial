@@ -76,6 +76,7 @@ class AllCreateTransactionsList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         transaction_hash = 'No Transaction Accomplished.'
         data = dict(serializer.validated_data)
+        print(data)
 
         try:
             sender_wallet = AllSenderWallet.objects.filter(from_address=data['sender_address'])[0]
@@ -148,6 +149,7 @@ class AllCreateTransactionsList(generics.ListCreateAPIView):
                 "seed": response["seed"], "amount": response["amount"]}
         headers = {'Content-Type': 'application/json'}
         json_data = json.dumps(data)
+        print(data)
         response = requests.post('http://ts:3000/api/broadcast-transaction/', data=json_data, headers=headers)
         data = response.json()
         if int(data['message']['code']) == 0 and response.status_code == 201:
