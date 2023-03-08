@@ -35,24 +35,26 @@ app.post('/api/broadcast-transaction', (req, res) => __awaiter(void 0, void 0, v
         from_address: req.body.from_address,
         to_address: req.body.to_address,
         seed: req.body.seed,
-        amount: req.body.amount
+        amount: req.body.amount,
+        memo: req.body.memo
     };
     const message = yield (0, experiment_1.default)(transaction);
     res.status(201).json({
         message
     });
 }));
-app.get('/api/run-all', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const transaction = {
-        from_address: req.body.from_address,
-        to_address: req.body.to_address,
-        seed: req.body.seed,
-        amount: req.body.amount
-    };
-    const response = yield (0, experiment_1.default)(transaction);
-    const postsJSON = JSON.stringify(response);
-    res.setHeader('Content-Type', 'application/json');
-    res.send(response);
-}));
+// app.get('/api/run-all', async(req, res)=>{
+//   const transaction: Transaction = {
+//     from_address: req.body.from_address,
+//     to_address: req.body.to_address,
+//     seed: req.body.seed,
+//     amount: req.body.amount
+//   };
+//
+//     const response = await runAll(transaction)
+//     const postsJSON = JSON.stringify(response);
+//     res.setHeader('Content-Type', 'application/json');
+//     res.send(response)
+// });
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`App is listening on PORT ${port}`));

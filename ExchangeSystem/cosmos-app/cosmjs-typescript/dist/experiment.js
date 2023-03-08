@@ -24,6 +24,8 @@ const runAll = (transaction) => __awaiter(void 0, void 0, void 0, function* () {
     const seed = transaction.seed;
     const amount = Math.floor(parseFloat(transaction.amount) * 10000000);
     console.log("this is amount", amount);
+    const memo = transaction.memo;
+    console.log("this is memo", memo);
     const client = yield stargate_1.StargateClient.connect(rpc);
     console.log("With client, chain id:", yield client.getChainId(), ", height:", yield client.getHeight());
     // const faucetTx: IndexedTx = (await client.getTx(
@@ -47,7 +49,7 @@ const runAll = (transaction) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield signingClient.sendTokens(fromAddress, toAddress, [{ denom: "uatom", amount: amount.toString() }], {
         amount: [{ denom: "uatom", amount: "500" }],
         gas: "200000",
-    });
+    }, memo);
     // Output the result of the Tx
     return result;
 });

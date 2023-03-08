@@ -24,6 +24,8 @@ const runAll = async(transaction: Transaction): Promise<DeliverTxResponse> => {
     const seed = transaction.seed
     const amount = Math.floor(parseFloat(transaction.amount) * 10000000)    
     console.log("this is amount", amount)
+    const memo = transaction.memo
+    console.log("this is memo", memo)
 
     const client = await StargateClient.connect(rpc)
     console.log("With client, chain id:", await client.getChainId(), ", height:", await client.getHeight())
@@ -66,6 +68,7 @@ const runAll = async(transaction: Transaction): Promise<DeliverTxResponse> => {
             amount: [{ denom: "uatom", amount: "500" }],
             gas: "200000",
         },
+        memo
     )
     // Output the result of the Tx
     return result   

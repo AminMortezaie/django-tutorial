@@ -27,7 +27,8 @@ export interface Transaction{
     from_address: string,
     to_address: string, 
     seed:string, 
-    amount:string
+    amount:string,
+    memo:string
 }
 
 
@@ -41,7 +42,8 @@ app.post('/api/broadcast-transaction', async(req, res)=>{
       from_address: req.body.from_address,
       to_address: req.body.to_address, 
       seed: req.body.seed, 
-      amount: req.body.amount
+      amount: req.body.amount,
+      memo: req.body.memo
     };
     const message = await runAll(transaction)
   
@@ -51,19 +53,19 @@ app.post('/api/broadcast-transaction', async(req, res)=>{
 });
 
 
-app.get('/api/run-all', async(req, res)=>{
-  const transaction: Transaction = {
-    from_address: req.body.from_address,
-    to_address: req.body.to_address, 
-    seed: req.body.seed, 
-    amount: req.body.amount
-  };
-
-    const response = await runAll(transaction)
-    const postsJSON = JSON.stringify(response);
-    res.setHeader('Content-Type', 'application/json');
-    res.send(response)
-});
+// app.get('/api/run-all', async(req, res)=>{
+//   const transaction: Transaction = {
+//     from_address: req.body.from_address,
+//     to_address: req.body.to_address,
+//     seed: req.body.seed,
+//     amount: req.body.amount
+//   };
+//
+//     const response = await runAll(transaction)
+//     const postsJSON = JSON.stringify(response);
+//     res.setHeader('Content-Type', 'application/json');
+//     res.send(response)
+// });
 
 
 
