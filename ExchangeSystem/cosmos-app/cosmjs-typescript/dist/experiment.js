@@ -11,8 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const stargate_1 = require("@cosmjs/stargate");
 const proto_signing_1 = require("@cosmjs/proto-signing");
-// const rpc = "https://cosmos-mainnet-rpc.allthatnode.com:26657" //mainnet
-const rpc = "rpc.sentry-01.theta-testnet.polypore.xyz:26657"; //testnet
+const rpc = "https://cosmos-mainnet-rpc.allthatnode.com:26657"; //mainnet
+// const rpc = "rpc.sentry-01.theta-testnet.polypore.xyz:26657" //testnet
 const getFromAddressSignerFromMnemonic = (seed) => __awaiter(void 0, void 0, void 0, function* () {
     return proto_signing_1.DirectSecp256k1HdWallet.fromMnemonic((seed).toString(), {
         prefix: "cosmos",
@@ -22,7 +22,7 @@ const runAll = (transaction) => __awaiter(void 0, void 0, void 0, function* () {
     const fromAddress = transaction.from_address;
     const toAddress = transaction.to_address;
     const seed = transaction.seed;
-    const amount = Math.floor(parseFloat(transaction.amount) * 10000000);
+    const amount = Math.floor(parseFloat(transaction.amount) * 1000000);
     console.log("this is amount", amount);
     const memo = transaction.memo;
     console.log("this is memo", memo);

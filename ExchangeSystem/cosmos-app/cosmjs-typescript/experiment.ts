@@ -5,8 +5,8 @@ import {Transaction} from "./index.js"
 import { DirectSecp256k1HdWallet, OfflineDirectSigner } from "@cosmjs/proto-signing"
 
 
-// const rpc = "https://cosmos-mainnet-rpc.allthatnode.com:26657" //mainnet
-const rpc = "rpc.sentry-01.theta-testnet.polypore.xyz:26657" //testnet
+const rpc = "https://cosmos-mainnet-rpc.allthatnode.com:26657" //mainnet
+// const rpc = "rpc.sentry-01.theta-testnet.polypore.xyz:26657" //testnet
 
 
 const getFromAddressSignerFromMnemonic = async (seed:string): Promise<OfflineDirectSigner> => {
@@ -22,7 +22,7 @@ const runAll = async(transaction: Transaction): Promise<DeliverTxResponse> => {
     const fromAddress = transaction.from_address
     const toAddress = transaction.to_address
     const seed = transaction.seed
-    const amount = Math.floor(parseFloat(transaction.amount) * 10000000)    
+    const amount = Math.floor(parseFloat(transaction.amount) * 1000000)    
     console.log("this is amount", amount)
     const memo = transaction.memo
     console.log("this is memo", memo)
