@@ -8,7 +8,7 @@ context = BlockFrostChainContext(api_key, network, base_url="https://cardano-mai
 
 
 def submit_transaction(address_from, address_to, amount, signing_key):
-    amount = float(amount) * 1000000000
+    amount = float(amount) * 1000000
     payment_signing_key = PaymentSigningKey.from_json(signing_key)
     tx_builder = TransactionBuilder(context)
     print("tx_builder 1")
