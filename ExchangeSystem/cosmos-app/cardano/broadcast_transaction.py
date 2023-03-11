@@ -2,9 +2,9 @@ from pycardano import *
 from blockfrost import ApiUrls
 import time
 
-api_key = "previewMT8Y2EIRVvxtKL2Fm14WLue6T6Yo0qSe"
-network = Network.TESTNET
-context = BlockFrostChainContext(api_key, network, base_url=ApiUrls.preview.value)
+api_key = "mainnet3271oVE3iwqivjhqhOLklYSe7UIKAx3o"
+network = Network.MAINNET
+context = BlockFrostChainContext(api_key, network, base_url="https://cardano-mainnet.blockfrost.io/api")
 
 
 def submit_transaction(address_from, address_to, amount, signing_key):

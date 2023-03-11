@@ -2,9 +2,9 @@ from pycardano import *
 from blockfrost import ApiUrls
 import time
 
-api_key = "previewMT8Y2EIRVvxtKL2Fm14WLue6T6Yo0qSe"
-network = Network.TESTNET
-context = BlockFrostChainContext(api_key, network, base_url=ApiUrls.preview.value)
+api_key = "mainnetTnMir0kxWPEcsWRVPOJxiMbiko76u6PU"
+network = Network.MAINNET
+context = BlockFrostChainContext(api_key, network, base_url=ApiUrls.mainnet.value)
 
 
 def submit_transaction(address_from, address_to, amount, signing_key):
@@ -49,5 +49,9 @@ def generate_wallet():
     payment_signing_key = PaymentSigningKey.generate()
     payment_verification_key = PaymentVerificationKey.from_signing_key(payment_signing_key)
     enterprise_address = Address(payment_part=payment_verification_key.hash(),
-                                 network=Network.TESTNET)
+                                 network=network)
     return enterprise_address, payment_signing_key
+
+
+
+
