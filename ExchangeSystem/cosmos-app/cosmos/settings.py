@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'transfer',
     'drf_yasg',
     'cardano',
-    'withdraw'
+    'withdraw',
+    'transaction_history'
 ]
 
 MIDDLEWARE = [
