@@ -18,6 +18,7 @@ from django.urls import path, include
 from transfer import views
 from cardano import views as cardano_views
 from withdraw import views as withdraw_views
+from transaction_history import views as history_views
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
@@ -64,6 +65,14 @@ urlpatterns = [
     path('api/receiver-wallets/<int:pk>/', withdraw_views.AllReceiverWalletObject.as_view()),
     path('api/transactions/', withdraw_views.AllCreateTransactionsList.as_view()),
     path('api/transactions/<int:pk>/', withdraw_views.AllCreateTransactionObject.as_view()),
+
+    path('api/wallets/', history_views.WalletsList.as_view()),
+    path('api/wallets/<int:pk>', history_views.WalletObject.as_view()),
+    path('api/networks/', history_views.NetworksList.as_view()),
+    path('api/networks/<int:pk>', history_views.NetworkObject.as_view()),
+    path('api/coins/', history_views.CoinsList.as_view()),
+    path('api/coins/<int:pk>', history_views.CoinObject.as_view()),
+    path('api/wallets/<int:wallet_id>/transactions/', history_views.TransactionHistoryList.as_view(), name='wallet-transaction-history'),
 
     path('api-auth/', include('rest_framework.urls')),
 
