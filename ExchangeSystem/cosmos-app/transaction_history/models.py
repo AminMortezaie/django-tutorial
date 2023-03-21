@@ -18,6 +18,7 @@ class Wallet(models.Model):
 
 class Coin(models.Model):
     name = models.CharField(default='', max_length=100)
+    symbol = models.CharField(default='', max_length=100)
     network = models.ForeignKey(Network, on_delete=models.CASCADE)
     contract = models.CharField(max_length=100)
 
@@ -32,6 +33,7 @@ class TransactionHistory(models.Model):
     network = models.ForeignKey(Network, default='', on_delete=models.CASCADE)
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=datetime.now)
+    transaction_type = models.CharField(default="OUT", max_length=10)
 
     class Meta:
         db_table = 'transaction_history_{wallet_id}'
