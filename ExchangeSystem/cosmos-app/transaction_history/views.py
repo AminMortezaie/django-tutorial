@@ -5,7 +5,7 @@ import pickle
 from .models import Wallet, Coin, Network, TransactionHistory
 from .serializers import WalletSerializer, NetworkSerializer, CoinSerializer, TransactionHistorySerializer
 from django.core.cache import cache
-from .get_tx import btc_transaction_history
+from .get_tx import btc_transaction_history, eth_get_transaction_history
 from threading import Timer
 from django.utils import timezone
 
@@ -149,16 +149,30 @@ class TransactionHistoryList(generics.ListAPIView):
                 print("wallet_network is btc")
                 network = Network.objects.filter(name='btc').first()
                 wallet = Wallet.objects.filter(address=wallet_address).first()
-                coin = Coin.objects.filter(symbol='BTC').first()
+                coin = Coin.objects.filter(symbol='BTC', network=network).first()
                 latest_txs = btc_transaction_history.get_transactions_btc(wallet_address)
                 # print(latest_txs)
+            if wallet_network == 'erc20':
+                print("wallet_network is erc20")
+                network = Network.objects.filter(name='erc20').first()
+                wallet = Wallet.objects.filter(address=wallet_address).first()
+                latest_txs = eth_get_transaction_history.get_erc20_history(wallet_address)
             else:
                 latest_txs = {}
 
             # Iterate through the transactions and update your database
             for tx in latest_txs:
-                # print("getting transactions...", tx['tx'])
-                # Check if the transaction already exists in your database to avoid duplicates
+                # print("getting transactions...", tx)
+                if wallet_network == 'erc20' and tx['contract_address'] != '':
+                    coin = Coin.objects.filter(contract=tx['contract_address'], network=network).first()
+                    if coin is None:
+                        # print(network)
+                        coin = Coin.objects.filter(symbol='no symbol', network=network).first()
+                        # print(coin)
+
+                elif wallet_network == 'erc20' and tx['contract_address'] == '':
+                    coin = Coin.objects.filter(symbol='ETH', network=network).first()
+
                 existing_tx = TransactionHistory.objects.filter(transaction_hash=tx['tx'], transaction_type=tx['type'], amount=tx['amount']).first()
                 if not existing_tx:
                     # Convert the transaction data to a dictionary compatible with the TransactionHistory model
@@ -170,7 +184,6 @@ class TransactionHistoryList(generics.ListAPIView):
                         'wallet': wallet,
                         'coin': coin
                     }
-
                     # Create a new TransactionHistory object
                     tx_obj = TransactionHistory(**tx_data)
                     tx_obj.save()
