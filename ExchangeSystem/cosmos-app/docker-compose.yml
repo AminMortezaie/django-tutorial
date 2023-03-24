@@ -19,6 +19,8 @@ services:
     depends_on:
       - db
       - redis
+      - celery
+      - beat
     networks:
       - my-network
   db:
@@ -32,6 +34,26 @@ services:
 
   redis:
     image: redis:latest
+    networks:
+      - my-network
+
+  celery:
+    build: .
+    command: celery -A cosmos worker -l info
+    volumes:
+      - .:/code
+    depends_on:
+      - redis
+      - beat
+    networks:
+      - my-network
+  beat:
+    build: .
+    command: celery -A cosmos beat -l info
+    volumes:
+      - .:/code
+    depends_on:
+      - redis
     networks:
       - my-network
 

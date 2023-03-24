@@ -25,7 +25,7 @@ def get_transactions_btc(wallet_address):
         for i in range(len(tx['inputs'])):
             if tx['inputs'][i]['addresses'][0] == wallet_address:
                 # print(tx['inputs'][i]['addresses'], tx['inputs'][i]['output_value'] / 100000000)
-                responses.append({"tx": tx['hash'], "type": "OUT", "amount": tx['inputs'][i]['output_value'] / 100000000})
+                responses.insert(1, {"tx": tx['hash'], "type": "OUT", "amount": tx['inputs'][i]['output_value'] / 100000000})
                 # print(response)
 
         # Loop through each output address (receiver) and print it, along with the amount received
@@ -33,7 +33,7 @@ def get_transactions_btc(wallet_address):
         for i in range(len(tx['outputs'])):
             if tx['outputs'][i]['addresses'][0] == wallet_address:
                 # print(tx['outputs'][i]['addresses'], tx['outputs'][i]['value'] / 100000000)
-                responses.append({"tx": tx['hash'], "type": "IN", "amount": tx['outputs'][i]['value'] / 100000000})
+                responses.insert(1, {"tx": tx['hash'], "type": "IN", "amount": tx['outputs'][i]['value'] / 100000000})
                 # print(response)
 
     # print(response)

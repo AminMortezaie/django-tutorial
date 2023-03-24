@@ -11,9 +11,26 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from celery.schedules import crontab
+
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+CELERY_BROKER_URL = 'redis://redis:6379/1'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/1'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+
+CELERY_BEAT_SCHEDULE = {
+    'update-transactions': {
+        'task': 'update_transactions',
+        'schedule': crontab(),
+    },
+}
 
 
 # Quick-start development settings - unsuitable for production
@@ -48,7 +65,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'cardano',
     'withdraw',
-    'transaction_history'
+    'transaction_history',
 ]
 
 MIDDLEWARE = [
