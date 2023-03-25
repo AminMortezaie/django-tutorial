@@ -76,7 +76,9 @@ class CoinsList(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         data = dict(serializer.validated_data)
+        print(data)
         if data['network'] == Network.objects.filter(name='erc20').first():
+            print("network is erc20 in saving coins.")
             serializer.save(contract=str(data['contract']).lower())
         serializer.save()
 
