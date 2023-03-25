@@ -74,6 +74,12 @@ class CoinsList(generics.ListCreateAPIView):
     serializer_class = CoinSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def perform_create(self, serializer):
+        data = dict(serializer.validated_data)
+        if data['network'] == Network.objects.filter(name='erc20').first():
+            serializer.save(contract=str(data['contract']).lower())
+        serializer.save()
+
 
 class TransactionHistoryList(generics.ListAPIView):
     serializer_class = TransactionHistorySerializer
