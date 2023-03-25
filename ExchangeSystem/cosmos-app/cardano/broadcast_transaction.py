@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 api_key = os.getenv("BLOCK_FROST_MAINNET_SECOND_API")
 network = Network.MAINNET
 context = BlockFrostChainContext(api_key, network, base_url="https://cardano-mainnet.blockfrost.io/api")
