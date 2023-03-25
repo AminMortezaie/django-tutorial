@@ -1,8 +1,12 @@
 from pycardano import *
 from blockfrost import ApiUrls
 import time
+import os
+from dotenv import load_dotenv
 
-api_key = "mainnet3271oVE3iwqivjhqhOLklYSe7UIKAx3o"
+load_dotenv()
+
+api_key = os.getenv("BLOCK_FROST_MAINNET_SECOND_API")
 network = Network.MAINNET
 context = BlockFrostChainContext(api_key, network, base_url="https://cardano-mainnet.blockfrost.io/api")
 

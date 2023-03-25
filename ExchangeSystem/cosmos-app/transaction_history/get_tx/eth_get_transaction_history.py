@@ -1,6 +1,10 @@
 import requests
+import os
+from dotenv import load_dotenv
 
-YOUR_API_KEY = 'FBUCR9DE9QPWFN9U83ZKNKZQYDE3VAECSE'
+load_dotenv()
+
+YOUR_API_KEY = os.getenv("ETH_TRANSACTION_HISTORY_API")
 responses = []
 tx_hash_map = {}
 # wallet_address = "0xac6a04823c043e17de953AcE2F6e6bDb603c78Fb"

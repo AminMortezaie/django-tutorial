@@ -71,7 +71,7 @@ kombu==5.2.4
 prompt-toolkit==3.0.38
 vine==5.0.0
 wcwidth==0.2.6
-
+python-dotenv==1.0.0
 
 
 

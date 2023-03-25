@@ -1,8 +1,12 @@
 import blockcypher
 import requests
 import json
+import os
+from dotenv import load_dotenv
 
-api_key = "27f383ae4ce240f897307c705b22f195"
+load_dotenv()
+
+api_key = os.getenv('BTC_TRANSACTION_HISTORY_API')
 # Set the API endpoint URL
 
 
