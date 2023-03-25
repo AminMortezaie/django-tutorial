@@ -80,7 +80,8 @@ class CoinsList(generics.ListCreateAPIView):
         if data['network'] == Network.objects.filter(name='erc20').first():
             print("network is erc20 in saving coins.")
             serializer.save(contract=str(data['contract']).lower())
-        serializer.save()
+        else:
+            serializer.save()
 
 
 class TransactionHistoryList(generics.ListAPIView):
