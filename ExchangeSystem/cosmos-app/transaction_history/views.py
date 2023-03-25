@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-# from get_transaction_history import eth_get_transaction_history as eth_tx
+from rest_framework.exceptions import ValidationError
 from rest_framework import generics, permissions
 import pickle
 from .models import Wallet, Coin, Network, TransactionHistory
@@ -76,12 +76,21 @@ class CoinsList(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         data = dict(serializer.validated_data)
-        print(data)
+        self.check_for_duplication(data)
         if data['network'] == Network.objects.filter(name='erc20').first():
             print("network is erc20 in saving coins.")
             serializer.save(contract=str(data['contract']).lower())
         else:
             serializer.save()
+
+    def check_for_duplication(self, data):
+        if data['network'] == Network.objects.filter(name='erc20'):
+            existing_coin = Coin.objects.filter(contract=str(data['contract']).lower(), network=data['network'])
+        else:
+            existing_coin = Coin.objects.filter(contract=data['contract'], network=data['network'])
+
+        if existing_coin:
+            raise ValidationError("Duplication Error. Coin is available..")
 
 
 class TransactionHistoryList(generics.ListAPIView):
