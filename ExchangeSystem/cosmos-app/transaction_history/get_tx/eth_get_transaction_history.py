@@ -53,10 +53,10 @@ def get_erc20_history(wallet_address):
             # print("------------------")
 
             if wallet_address.lower() == str(sender) and transaction['hash'] not in tx_hash_map:
-                responses.insert(1,
+                responses.insert(0,
                                  {"tx": transaction['hash'], "type": "OUT", "amount": value, "contract_address": contract_address})
             elif wallet_address.lower() != str(sender) and transaction['hash'] not in tx_hash_map:
-                responses.insert(1,
+                responses.insert(0,
                                  {"tx": transaction['hash'], "type": "IN", "amount": value, "contract_address": contract_address})
             tx_hash_map[transaction['hash']] = True
 
