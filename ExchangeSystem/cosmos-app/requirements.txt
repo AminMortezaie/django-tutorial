@@ -9,7 +9,7 @@ h11==0.14.0
 h2==4.1.0
 hdwallets==0.1.2
 hpack==4.0.0
-httpcore==0.16.3
+# httpcore==0.17.0
 httpx==0.23.3
 hyperframe==6.0.1
 multidict==6.0.4
@@ -72,6 +72,6 @@ prompt-toolkit==3.0.38
 vine==5.0.0
 wcwidth==0.2.6
 python-dotenv==1.0.0
-
+base58==2.1.1
 
 

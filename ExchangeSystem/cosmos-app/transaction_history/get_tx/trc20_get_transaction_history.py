@@ -7,9 +7,6 @@ from dotenv import load_dotenv
 load_dotenv()
 # Replace YOUR_API_KEY with your TronGrid API key
 api_key = os.getenv("TRON_GRID_API")
-
-# Replace WALLET_ADDRESS with the address of the TRX wallet you want to query
-# wallet_address = "TTmaAAbFPtACn1amP3FBkmmUygFh8udAvA"
 responses = []
 tx_hash_map = {}
 
@@ -70,9 +67,5 @@ def get_trc20_transactions(wallet_address):
             print("Error:", response.text)
     sorted_data = sorted(responses, key=lambda x: int(x['timestamp']), reverse=False)
     print(sorted_data)
-
-
-# get_trc20_transactions(wallet_address)
-
-
+    return sorted_data
 

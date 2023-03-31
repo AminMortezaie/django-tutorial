@@ -39,16 +39,18 @@ def update_transactions():
         elif wallet_network == 'trc20':
             print("wallet network is trc20")
             network = Network.objects.filter(name='trc20').first()
+            print(wallet_address)
             wallet = Wallet.objects.filter(address=wallet_address).first()
             latest_txs = trc20_get_transaction_history.get_trc20_transactions(wallet_address)
-            # print("trc20 network txs:")
+            print("trc20 network txs:")
+            print(latest_txs)
 
         else:
             latest_txs = {}
 
         # Iterate through the transactions and update your database
         for tx in latest_txs:
-            print("getting transactions...")
+            print("getting transactions for ", wallet_address)
             if (wallet_network == 'erc20' or wallet_network == 'trc20') and tx['contract_address'] != '':
                 coin = Coin.objects.filter(contract=tx['contract_address'], network=network).first()
                 if coin is None:
