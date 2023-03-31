@@ -9,7 +9,7 @@ load_dotenv()
 api_key = os.getenv("TRON_GRID_API")
 
 # Replace WALLET_ADDRESS with the address of the TRX wallet you want to query
-wallet_address = "TTmaAAbFPtACn1amP3FBkmmUygFh8udAvA"
+# wallet_address = "TTmaAAbFPtACn1amP3FBkmmUygFh8udAvA"
 responses = []
 tx_hash_map = {}
 
@@ -72,7 +72,7 @@ def get_trc20_transactions(wallet_address):
     print(sorted_data)
 
 
-get_trc20_transactions(wallet_address)
+# get_trc20_transactions(wallet_address)
 
 
 
