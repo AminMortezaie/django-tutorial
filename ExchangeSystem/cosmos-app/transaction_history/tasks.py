@@ -1,7 +1,7 @@
 from celery import shared_task
 from .models import Wallet, Coin, Network, TransactionHistory
 from django.core.cache import cache
-from .get_tx import btc_transaction_history, eth_get_transaction_history
+from .get_tx import btc_transaction_history, eth_get_transaction_history, trc20_get_transaction_history
 from datetime import datetime, timedelta
 
 
@@ -25,15 +25,23 @@ def update_transactions():
             wallet = Wallet.objects.filter(address=wallet_address).first()
             coin = Coin.objects.filter(symbol='BTC', network=network).first()
             latest_txs = btc_transaction_history.get_transactions_btc(wallet_address)
-            print("btc network txs:")
+            # print("btc network txs:")
             # print(latest_txs)
+
         elif wallet_network == 'erc20':
             print("wallet_network is erc20")
             network = Network.objects.filter(name='erc20').first()
             wallet = Wallet.objects.filter(address=wallet_address).first()
             latest_txs = eth_get_transaction_history.get_erc20_history(wallet_address)
-            print("erc20 network txs:")
+            # print("erc20 network txs:")
             # print(latest_txs)
+
+        elif wallet_network == 'trc20':
+            print("wallet network is trc20")
+            network = Network.objects.filter(name='trc20').first()
+            wallet = Wallet.objects.filter(address=wallet_address).first()
+            latest_txs = trc20_get_transaction_history.get_trc20_transactions(wallet_address)
+            # print("trc20 network txs:")
 
         else:
             latest_txs = {}
@@ -41,7 +49,7 @@ def update_transactions():
         # Iterate through the transactions and update your database
         for tx in latest_txs:
             print("getting transactions...")
-            if wallet_network == 'erc20' and tx['contract_address'] != '':
+            if (wallet_network == 'erc20' or wallet_network == 'trc20') and tx['contract_address'] != '':
                 coin = Coin.objects.filter(contract=tx['contract_address'], network=network).first()
                 if coin is None:
                     # print(network)
@@ -50,6 +58,9 @@ def update_transactions():
 
             elif wallet_network == 'erc20' and tx['contract_address'] == '':
                 coin = Coin.objects.filter(symbol='ETH', network=network).first()
+
+            elif wallet_network == 'trc20' and tx['contract_address'] == '':
+                coin = Coin.objects.filter(symbol='TRX', network=network).first()
 
             existing_tx = TransactionHistory.objects.filter(transaction_hash=tx['tx'], transaction_type=tx['type'], amount=tx['amount'], wallet=wallet).first()
 

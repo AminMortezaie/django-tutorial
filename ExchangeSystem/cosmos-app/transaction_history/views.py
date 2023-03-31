@@ -87,7 +87,7 @@ class CoinsList(generics.ListCreateAPIView):
         if data['network'] == Network.objects.filter(name='erc20'):
             existing_coin = Coin.objects.filter(contract=str(data['contract']).lower(), network=data['network'])
         else:
-            existing_coin = Coin.objects.filter(contract=data['contract'], network=data['network'])
+            existing_coin = Coin.objects.filter(contract=data['contract'], network=data['network'], symbol=data['symbol'])
 
         if existing_coin:
             raise ValidationError("Duplication Error. Coin is available..")
