@@ -2,7 +2,6 @@ import os
 
 import requests
 import base58
-import hashlib
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -40,7 +39,6 @@ def get_trc20_transactions(wallet_address):
 
             # Print the transaction data
             for transaction in transactions:
-                # print(transaction)
                 # noinspection PyBroadException
                 try:
                     if transaction['transaction_id']:
@@ -48,10 +46,10 @@ def get_trc20_transactions(wallet_address):
                             tx_type = "OUT"
                         else:
                             tx_type = "IN"
-                        responses.append({"tx": transaction['transaction_id'],
-                                          "type": tx_type, "amount": int(transaction['value']) / 10 ** 6,
-                                          "contract_address": transaction['token_info']['address'],
-                                          "timestamp": transaction['block_timestamp']})
+                        responses.append({"tx": str(transaction['transaction_id']),
+                                          "type": tx_type, "amount": str(int(transaction['value']) / 10 ** 6),
+                                          "contract_address": str(transaction['token_info']['address']),
+                                          "timestamp": str(transaction['block_timestamp'])})
                         tx_hash_map[transaction['transaction_id']] = True
                 except:
                     if transaction['txID'] and transaction['txID'] not in tx_hash_map:
@@ -60,17 +58,18 @@ def get_trc20_transactions(wallet_address):
                             tx_type = "OUT"
                         else:
                             tx_type = "IN"
-                        responses.append({"tx": transaction['txID'],
-                                          "type": tx_type,
+                        responses.append({"tx": str(transaction['txID']),
+                                          "type": str(tx_type),
                                           "amount": int(payload['amount']) / 10 ** 6,
-                                          "contract_address": '',
-                                          "timestamp": transaction['raw_data']['timestamp']})
+                                          "contract_address": "",
+                                          "timestamp": str(transaction['raw_data']['timestamp'])})
                         tx_hash_map[transaction['txID']] = True
 
         else:
             # Handle errors here
             print("Error:", response.text)
-    print(responses)
+    sorted_data = sorted(responses, key=lambda x: int(x['timestamp']), reverse=False)
+    print(sorted_data)
 
 
 get_trc20_transactions(wallet_address)
