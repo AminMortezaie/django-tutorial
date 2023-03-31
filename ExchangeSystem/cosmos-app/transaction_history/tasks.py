@@ -50,7 +50,7 @@ def update_transactions():
 
         # Iterate through the transactions and update your database
         for tx in latest_txs:
-            print("getting transactions for ", wallet_address)
+            print("getting transactions for ")
             if (wallet_network == 'erc20' or wallet_network == 'trc20') and tx['contract_address'] != '':
                 coin = Coin.objects.filter(contract=tx['contract_address'], network=network).first()
                 if coin is None:
@@ -77,9 +77,7 @@ def update_transactions():
                     'coin': coin
                 }
                 # Create a new TransactionHistory object
-
                 tx_obj = TransactionHistory(**tx_data)
-                print(tx_obj)
                 tx_obj.save()
                 print("tx might be saved...")
             else:

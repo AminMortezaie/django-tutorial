@@ -1,14 +1,14 @@
 import os
-
+import time
 import requests
 import base58
 from dotenv import load_dotenv
 
 load_dotenv()
 # Replace YOUR_API_KEY with your TronGrid API key
-api_key = os.getenv("TRON_GRID_API")
-responses = []
-tx_hash_map = {}
+string_list = ['TRON_GRID_API', 'TRON_GRID_API2', 'TRON_GRID_API3']
+# random_string = random.choice(string_list)
+api_key = os.getenv('TRON_GRID_API')
 
 
 def check_for_address(wallet_address):
@@ -18,13 +18,19 @@ def check_for_address(wallet_address):
 
 
 def get_trc20_transactions(wallet_address):
+    responses = []
+    tx_hash_map = {}
     get_token_tx_url = f"https://api.trongrid.io/v1/accounts/{wallet_address}/transactions/trc20"
     get_pure_tx_url = f"https://api.trongrid.io/v1/accounts/{wallet_address}/transactions"
 
     urls = [get_token_tx_url, get_pure_tx_url]
     for url in urls:
-        response = requests.get(url,
-                                headers={"TRON-PRO-API-KEY": api_key})
+        session = requests.Session()
+        headers = {
+            "TRON-PRO-API-KEY": api_key,
+            'Cache-Control': 'no-cache'}
+
+        response = session.get(url, headers=headers)
 
         # Check if the request was successful
         if response.status_code == 200:
@@ -43,7 +49,7 @@ def get_trc20_transactions(wallet_address):
                             tx_type = "OUT"
                         else:
                             tx_type = "IN"
-                        responses.append({"tx": str(transaction['transaction_id']),
+                        responses.append({"wallet_address": wallet_address, "tx": str(transaction['transaction_id']),
                                           "type": tx_type, "amount": str(int(transaction['value']) / 10 ** 6),
                                           "contract_address": str(transaction['token_info']['address']),
                                           "timestamp": str(transaction['block_timestamp'])})
@@ -55,7 +61,7 @@ def get_trc20_transactions(wallet_address):
                             tx_type = "OUT"
                         else:
                             tx_type = "IN"
-                        responses.append({"tx": str(transaction['txID']),
+                        responses.append({"wallet_address": wallet_address, "tx": str(transaction['txID']),
                                           "type": str(tx_type),
                                           "amount": int(payload['amount']) / 10 ** 6,
                                           "contract_address": "",
@@ -68,4 +74,3 @@ def get_trc20_transactions(wallet_address):
     sorted_data = sorted(responses, key=lambda x: int(x['timestamp']), reverse=False)
     print(sorted_data)
     return sorted_data
-
