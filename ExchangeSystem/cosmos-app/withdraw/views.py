@@ -107,6 +107,13 @@ class AllCreateTransactionsList(generics.ListCreateAPIView):
             data.update({'from_address': sender_wallet_data, 'to_address': receiver_wallet_data})
             transaction_hash = self.cosmos_get_transaction_hash(data)
 
+        elif serializer.validated_data['network'] == 'zilliqa':
+            sender_wallet_data = {'from_address': sender_wallet.from_address, 'network': sender_wallet.network,
+                                  'private_key': sender_wallet.private_key}
+            data.update({'from_address': sender_wallet_data})
+            data.update({'from_address': sender_wallet_data, 'to_address': receiver_wallet_data})
+            transaction_hash = self.zilliqa_get_transaction_hash(data)
+
         text = f"['{data['sender_address']}', '{data['receiver_address']}', '{data['amount']}'," \
                f"'{data['symbol'].lower()}','{data['to_address']['memo']}','{data['network'].upper()}', " \
                f"'{transaction_hash}']"
@@ -142,7 +149,8 @@ class AllCreateTransactionsList(generics.ListCreateAPIView):
         memo = receiver_wallet['memo']
 
         return {'from_address': sender_wallet['from_address'],
-                "seed": seed, "to_address": receiver_wallet['to_address'], "memo": memo, "amount": transaction['amount']}
+                "seed": seed, "to_address": receiver_wallet['to_address'], "memo": memo,
+                "amount": transaction['amount']}
 
     def cosmos_get_transaction_hash(self, transaction):
         response = self.cosmos_get_values(transaction)
@@ -160,12 +168,36 @@ class AllCreateTransactionsList(generics.ListCreateAPIView):
         else:
             raise ValidationError('API request failed with status code', response.status_code)
 
+    def zilliqa_get_values(self, transaction):
+        sender_wallet = transaction['from_address']
+        receiver_wallet = transaction['to_address']
+        private_key = sender_wallet['private_key']['private_key']
+
+        return {'from_address': sender_wallet['from_address'],
+                "private_key": private_key, "to_address": receiver_wallet['to_address'], "amount": transaction['amount']}
+
+    def zilliqa_get_transaction_hash(self, transaction):
+        response = self.zilliqa_get_values(transaction)
+        data = {"from_address": response["from_address"], "to_address": response["to_address"],
+                "private_key": response["private_key"], "amount": response["amount"]}
+        headers = {'Content-Type': 'application/json'}
+        json_data = json.dumps(data)
+        print(data)
+        response = requests.post('http://zil:8080/api/broadcast-transaction/', data=json_data, headers=headers)
+        data = response.json()
+        if data['message']['tx'] and response.status_code == 201:
+            return data['message']['tx']
+        elif data['message']['err']:
+            raise ValidationError(data['message']['err'])
+        else:
+            raise ValidationError('API request failed with status code', response.status_code)
+
     def network_conflict_error(self, payload_network, second_network, network, symbol):
         if payload_network != second_network:
             raise ValidationError("Sender and receiver networks are not the same.")
         if network != payload_network:
             raise ValidationError("You've entered wrong network.")
-        if (network == 'cosmos' and symbol != 'atom') or (network == 'cardano' and symbol != 'ada'):
+        if (network == 'cosmos' and symbol != 'atom') or (network == 'cardano' and symbol != 'ada') or (network == 'zilliqa' and symbol != 'zil'):
             raise ValidationError("You've entered wrong Symbol.")
         return "no conflict detected."
 
