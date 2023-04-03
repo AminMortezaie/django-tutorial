@@ -5,12 +5,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 YOUR_API_KEY = os.getenv("ETH_TRANSACTION_HISTORY_API")
-responses = []
-tx_hash_map = {}
-# wallet_address = "0xac6a04823c043e17de953AcE2F6e6bDb603c78Fb"
 
 
 def get_erc20_history(wallet_address):
+    responses = []
+    tx_hash_map = {}
     get_token_tx_url = f"https://api.etherscan.io/api?module=account&action=tokentx&address={wallet_address}&startblock=0&endblock=99999999&sort=desc&apikey={YOUR_API_KEY}"
     get_pure_tx_url = f"https://api.etherscan.io/api?module=account&action=txlist&address={wallet_address}&startblock=0&endblock=99999999&sort=desc&apikey={YOUR_API_KEY}"
     urls = [get_token_tx_url, get_pure_tx_url]
@@ -61,6 +60,3 @@ def get_erc20_history(wallet_address):
             tx_hash_map[transaction['hash']] = True
 
     return responses
-
-
-# get_erc20_history(wallet_address)
