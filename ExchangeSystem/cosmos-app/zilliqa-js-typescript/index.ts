@@ -35,7 +35,7 @@ app.post('/api/broadcast-transaction', async(req, res)=>{
 
 
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 8080;
 
 app.listen(port, ()=>console.log(`App is listening on PORT ${port}`));
 

@@ -9,13 +9,21 @@ services:
       - "3000:3000"
     networks:
       - my-network
+  zil:
+    build:
+      context: .
+      dockerfile: Dockerfile-zil
+    ports:
+      - "8080:8080"
+    networks:
+      - my-network
   web:
     build: .
     command: python /code/manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
-      - 8000:8000
+      - "8000:8000"
     depends_on:
       - db
       - redis

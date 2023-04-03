@@ -1,0 +1,17 @@
+FROM node:14-alpine
+
+WORKDIR /app
+
+COPY zilliqa-js-typescript/package*.json ./
+
+RUN npm install
+
+RUN npm i -D typescript
+
+RUN npm i -g nodemon
+
+COPY zilliqa-js-typescript .
+
+EXPOSE 8080
+
+CMD ["npm", "run", "dev"]
