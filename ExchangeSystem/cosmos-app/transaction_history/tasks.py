@@ -1,7 +1,7 @@
 from celery import shared_task
 from .models import Wallet, Coin, Network, TransactionHistory
 from django.core.cache import cache
-from .get_tx import btc_transaction_history, eth_get_transaction_history, trc20_get_transaction_history
+from .get_tx import btc_transaction_history, eth_get_transaction_history, trc20_get_transaction_history, cardano_get_transaction_history
 from datetime import datetime, timedelta
 
 
@@ -25,6 +25,14 @@ def update_transactions():
             wallet = Wallet.objects.filter(address=wallet_address).first()
             coin = Coin.objects.filter(symbol='BTC', network=network).first()
             latest_txs = btc_transaction_history.get_transactions_btc(wallet_address)
+            # print("btc network txs:")
+            # print(latest_txs)
+        elif wallet_network == 'cardano':
+            print("wallet_network is cardano")
+            network = Network.objects.filter(name='cardano').first()
+            wallet = Wallet.objects.filter(address=wallet_address).first()
+            coin = Coin.objects.filter(symbol='ADA', network=network).first()
+            latest_txs = cardano_get_transaction_history.get_cardano_history(wallet_address)
             # print("btc network txs:")
             # print(latest_txs)
 
