@@ -1,4 +1,3 @@
-import blockcypher
 import requests
 import json
 import os
@@ -7,16 +6,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 api_key = os.getenv('BTC_TRANSACTION_HISTORY_API')
-# Set the API endpoint URL
 
 
-# Make an HTTP GET request to the endpoint and store the response in 'response'
-
-responses = []
-
-
-# Print out some details for each transaction in the array
 def get_transactions_btc(wallet_address):
+    responses = []
     url = f'https://api.blockcypher.com/v1/btc/main/addrs/{wallet_address}/full?token={api_key}'
     response = requests.get(url)
     # Convert the JSON response to a Python dictionary
