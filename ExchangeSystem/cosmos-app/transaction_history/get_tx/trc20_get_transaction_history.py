@@ -72,5 +72,4 @@ def get_trc20_transactions(wallet_address):
             # Handle errors here
             print("Error:", response.text)
     sorted_data = sorted(responses, key=lambda x: int(x['timestamp']), reverse=False)
-    print(sorted_data)
     return sorted_data

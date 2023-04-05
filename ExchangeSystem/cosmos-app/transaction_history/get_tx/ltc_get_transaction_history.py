@@ -10,9 +10,7 @@ load_dotenv()
 api_key = os.getenv('BTC_TRANSACTION_HISTORY_API')
 
 # Replace the following variables with your own values
-address = "LgycvYBU9SVr1dVuq7gC1mdwukyW7qKoeX"  # the Litecoin address you want to get transactions for
-
-test_res = [{'tx': '308cf9cf5c765188e1db35ca05306d2cfc8a62dbfc31d061c1c1027e223163dc', 'type': 'IN', 'amount': 101.56485298}, {'tx': '308cf9cf5c765188e1db35ca05306d2cfc8a62dbfc31d061c1c1027e223163dc', 'type': 'OUT', 'amount': 101.77596548}, {'tx': 'f5a51dcb1d24e642cd9216364210ec69c8fa71ea6a0ef6d95e691b3643621b4a', 'type': 'IN', 'amount': 54.36649336}, {'tx': 'f5a51dcb1d24e642cd9216364210ec69c8fa71ea6a0ef6d95e691b3643621b4a', 'type': 'OUT', 'amount': 64.36660586}, {'tx': '37e70fff3a2f8fedd6579e893baf0cd1a4bfa7e3196c8524edbf9f3e1b1c60e7', 'type': 'IN', 'amount': 54.13346571}, {'tx': '37e70fff3a2f8fedd6579e893baf0cd1a4bfa7e3196c8524edbf9f3e1b1c60e7', 'type': 'OUT', 'amount': 54.36649336}, {'tx': '31e05ab9dc91d99acfa2ae9205d48b6467420ad2713304eaa6f35fd077516acd', 'type': 'IN', 'amount': 51.85944198}, {'tx': '31e05ab9dc91d99acfa2ae9205d48b6467420ad2713304eaa6f35fd077516acd', 'type': 'OUT', 'amount': 54.13346571}, {'tx': '80a94aa5f22263007eadf66b1b5903ead6e832fce77015513196b1764ca915d3', 'type': 'IN', 'amount': 51.64349548}, {'tx': '80a94aa5f22263007eadf66b1b5903ead6e832fce77015513196b1764ca915d3', 'type': 'OUT', 'amount': 51.85944198}, {'tx': 'cafe1de4137fbb4ff9e6efae2b330678ea0f52dec40d59bea1074bd220a58e35', 'type': 'IN', 'amount': 51.39938298}, {'tx': 'cafe1de4137fbb4ff9e6efae2b330678ea0f52dec40d59bea1074bd220a58e35', 'type': 'OUT', 'amount': 51.64349548}, {'tx': '03f0d6882a85165081200fdc3fcd6665bb4cd38a0914aea0c90bd48fc9dedd69', 'type': 'IN', 'amount': 51.19527048}, {'tx': '03f0d6882a85165081200fdc3fcd6665bb4cd38a0914aea0c90bd48fc9dedd69', 'type': 'OUT', 'amount': 51.39938298}, {'tx': '1d0c7aac5dc95404905c64ededf27dbedbb0c345b59011fcfbfda797b12f3fc7', 'type': 'IN', 'amount': 50.98715798}, {'tx': '1d0c7aac5dc95404905c64ededf27dbedbb0c345b59011fcfbfda797b12f3fc7', 'type': 'OUT', 'amount': 51.19527048}, {'tx': '7fd8df7be27ddd0a2bb43c7e635c475774852b0abdad4ad217897e240af5bff6', 'type': 'IN', 'amount': 242.34575771}, {'tx': '1673ba2f6ff1aa24bf19e1e02d8026646f623e747842c7ac296781160ef3965f', 'type': 'IN', 'amount': 20.98704548}, {'tx': '1673ba2f6ff1aa24bf19e1e02d8026646f623e747842c7ac296781160ef3965f', 'type': 'OUT', 'amount': 50.98715798}]
+# address = "LgycvYBU9SVr1dVuq7gC1mdwukyW7qKoeX"  # the Litecoin address you want to get transactions for
 
 
 def create_response(responses):
@@ -40,12 +38,11 @@ def create_response(responses):
     return final_response
 
 
-def get_txs(wallet_address):
+def get_transactions_ltc(wallet_address):
     responses = []
-    txs_hash_map = {}
 
     # Construct the API URL
-    api_url = f"https://api.blockcypher.com/v1/ltc/main/addrs/{address}/full?token={api_key}"
+    api_url = f"https://api.blockcypher.com/v1/ltc/main/addrs/{wallet_address}/full?token={api_key}"
 
     # Make a GET request to the API URL
     response = requests.get(api_url)
@@ -94,9 +91,6 @@ def get_tx_data(tx_hash):
         print(f"Error: {response.status_code}")
         return f"Error: {response.status_code}"
 
-
-res = get_txs(wallet_address=address)
-print(res)
 
 
 
