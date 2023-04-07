@@ -80,7 +80,7 @@ def get_transactions_ltc(wallet_address):
 
 
 def get_tx_data(tx_hash):
-    api_url_tx = f"https://api.blockcypher.com/v1/ltc/main/txs/{tx_hash}?limit=50?token={api_key}"
+    api_url_tx = f"https://api.blockcypher.com/v1/ltc/main/txs/{tx_hash}?instart=0&outstart=0&limit=50"
     response = requests.get(api_url_tx)
     if response.status_code == 200:
         # Parse the JSON response
