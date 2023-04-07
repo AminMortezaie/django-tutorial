@@ -61,40 +61,43 @@ def update_transactions():
             latest_txs = trc20_get_transaction_history.get_trc20_transactions(wallet_address)
 
         else:
-            latest_txs = {}
+            latest_txs = None
 
         # Iterate through the transactions and update your database
-        for tx in latest_txs:
-            print("getting transactions for ")
-            if (wallet_network == 'erc20' or wallet_network == 'trc20') and tx['contract_address'] != '':
-                coin = Coin.objects.filter(contract=tx['contract_address'], network=network).first()
-                if coin is None:
-                    coin = Coin.objects.filter(symbol='no symbol', network=network).first()
+        if latest_txs is not None:
+            for tx in latest_txs:
+                print("getting transactions for ")
+                if (wallet_network == 'erc20' or wallet_network == 'trc20') and tx['contract_address'] != '':
+                    coin = Coin.objects.filter(contract=tx['contract_address'], network=network).first()
+                    if coin is None:
+                        coin = Coin.objects.filter(symbol='no symbol', network=network).first()
 
-            elif wallet_network == 'erc20' and tx['contract_address'] == '':
-                coin = Coin.objects.filter(symbol='ETH', network=network).first()
+                elif wallet_network == 'erc20' and tx['contract_address'] == '':
+                    coin = Coin.objects.filter(symbol='ETH', network=network).first()
 
-            elif wallet_network == 'trc20' and tx['contract_address'] == '':
-                coin = Coin.objects.filter(symbol='TRX', network=network).first()
+                elif wallet_network == 'trc20' and tx['contract_address'] == '':
+                    coin = Coin.objects.filter(symbol='TRX', network=network).first()
 
-            existing_tx = TransactionHistory.objects.filter(transaction_hash=tx['tx'], transaction_type=tx['type'], amount=tx['amount'], wallet=wallet).first()
+                existing_tx = TransactionHistory.objects.filter(transaction_hash=tx['tx'], transaction_type=tx['type'], amount=tx['amount'], wallet=wallet).first()
 
-            if not existing_tx:
-                # Convert the transaction data to a dictionary compatible with the TransactionHistory model
-                tx_data = {
-                    'transaction_hash': tx['tx'],
-                    'amount': tx['amount'],
-                    'transaction_type': tx['type'],
-                    'network': network,
-                    'wallet': wallet,
-                    'coin': coin
-                }
-                # Create a new TransactionHistory object
-                tx_obj = TransactionHistory(**tx_data)
-                tx_obj.save()
-                print("tx might be saved...")
-            else:
-                print("Transaction already exists in database")
+                if not existing_tx:
+                    # Convert the transaction data to a dictionary compatible with the TransactionHistory model
+                    tx_data = {
+                        'transaction_hash': tx['tx'],
+                        'amount': tx['amount'],
+                        'transaction_type': tx['type'],
+                        'network': network,
+                        'wallet': wallet,
+                        'coin': coin
+                    }
+                    # Create a new TransactionHistory object
+                    tx_obj = TransactionHistory(**tx_data)
+                    tx_obj.save()
+                    print("tx might be saved...")
+                else:
+                    print("Transaction already exists in database")
 
-        # Invalidate the cached result for this wallet so that it will be refreshed on the next request
-        cache.delete(f'transactions_{wallet_id}')
+                # Invalidate the cached result for this wallet so that it will be refreshed on the next request
+                cache.delete(f'transactions_{wallet_id}')
+        else:
+            print("no transaction received.")
