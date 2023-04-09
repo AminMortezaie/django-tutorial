@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 api_key = os.getenv('BTC_TRANSACTION_HISTORY_API')
+getblock_api = os.getenv('GET_BLOCK_API')
 
 # Replace the following variables with your own values
 # address = "LgycvYBU9SVr1dVuq7gC1mdwukyW7qKoeX"  # the Litecoin address you want to get transactions for
@@ -57,30 +58,31 @@ def get_transactions_ltc(wallet_address):
         # Print out the transactions
         for tx in data['txs']:
             tx_hash = tx['hash']
+            print("getting txs details...")
             tx_data = get_tx_data(tx_hash)
             # print(tx_data['hash'])
             # print("this is inputs...")
 
-            for inp in tx_data['inputs']:
+            for inp in tx_data['vin']:
                 sender_address = inp['addresses'][0]
-                sender_amount = float(inp['output_value'])/10**8
+                sender_amount = float(inp['value'])
                 if sender_address == wallet_address:
-                    responses.insert(0, {"tx": tx_data['hash'], "type": "OUT", "amount": sender_amount})
+                    responses.insert(0, {"tx": tx_data['txid'], "type": "OUT", "amount": sender_amount})
 
             # print("this is outputs...")
-            for out in tx_data['outputs']:
-                receiver_address = out['addresses'][0]
-                receiver_amount = float(out['value'])/10**8
+            for out in tx_data['vout']:
+                receiver_address = out['scriptPubKey']['addresses'][0]
+                receiver_amount = float(out['value'])
 
                 if receiver_address == wallet_address:
-                    responses.insert(0, {"tx": tx_data['hash'], "type": "IN", "amount": receiver_amount})
+                    responses.insert(0, {"tx": tx_data['txid'], "type": "IN", "amount": receiver_amount})
         return create_response(responses)
     else:
         print(f"Error: {response.status_code}")
 
 
 def get_tx_data(tx_hash):
-    api_url_tx = f"https://api.blockcypher.com/v1/ltc/main/txs/{tx_hash}?instart=0&outstart=0&limit=50"
+    api_url_tx = f"https://ltc.getblock.io/{getblock_api}/mainnet/blockbook/api/tx/{tx_hash}"
     response = requests.get(api_url_tx)
     if response.status_code == 200:
         # Parse the JSON response
