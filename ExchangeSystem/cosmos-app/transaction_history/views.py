@@ -69,6 +69,17 @@ class CoinObject(generics.RetrieveDestroyAPIView):
         return coin
 
 
+def check_for_duplication(data):
+    if (data['network'] == Network.objects.filter(name='erc20').first()) or \
+            (data['network'] == Network.objects.filter(name='bsc').first()):
+        existing_coin = Coin.objects.filter(contract=str(data['contract']).lower(), network=data['network'], symbol=data['symbol'])
+    else:
+        existing_coin = Coin.objects.filter(contract=data['contract'], network=data['network'], symbol=data['symbol'])
+
+    if existing_coin:
+        raise ValidationError("Duplication Error. Coin is available..")
+
+
 class CoinsList(generics.ListCreateAPIView):
     queryset = Coin.objects.all()
     serializer_class = CoinSerializer
@@ -76,21 +87,12 @@ class CoinsList(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         data = dict(serializer.validated_data)
-        self.check_for_duplication(data)
-        if data['network'] == Network.objects.filter(name='erc20').first():
-            print("network is erc20 in saving coins.")
+        check_for_duplication(data)
+        if (data['network'] == Network.objects.filter(name='erc20').first()) or (data['network'] == Network.objects.filter(name='bsc').first()):
+            print("network is erc20 or bsc in saving coins.")
             serializer.save(contract=str(data['contract']).lower())
         else:
             serializer.save()
-
-    def check_for_duplication(self, data):
-        if data['network'] == Network.objects.filter(name='erc20'):
-            existing_coin = Coin.objects.filter(contract=str(data['contract']).lower(), network=data['network'])
-        else:
-            existing_coin = Coin.objects.filter(contract=data['contract'], network=data['network'], symbol=data['symbol'])
-
-        if existing_coin:
-            raise ValidationError("Duplication Error. Coin is available..")
 
 
 class TransactionHistoryList(generics.ListAPIView):
