@@ -37,7 +37,7 @@ def create_response(responses):
     return final_response
 
 
-def get_transactions_ltc(wallet_address):
+def get_transactions_dash(wallet_address):
     responses = []
 
     # Construct the API URL
@@ -95,5 +95,5 @@ def get_tx_data(tx_hash):
         return f"Error: {response.status_code}"
 
 
-# res = get_transactions_ltc(wallet_address=address)
+# res = get_transactions_dash(wallet_address=address)
 # print(res)
