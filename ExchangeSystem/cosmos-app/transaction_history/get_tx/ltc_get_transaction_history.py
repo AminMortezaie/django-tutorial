@@ -6,8 +6,6 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
-api_key = os.getenv('BTC_TRANSACTION_HISTORY_API')
 getblock_api = os.getenv('GET_BLOCK_API')
 
 # Replace the following variables with your own values
@@ -43,7 +41,7 @@ def get_transactions_ltc(wallet_address):
     responses = []
 
     # Construct the API URL
-    api_url = f"https://api.blockcypher.com/v1/ltc/main/addrs/{wallet_address}/full?token={api_key}"
+    api_url = f"https://ltc.getblock.io/{getblock_api}/mainnet/blockbook/api/v2/address/{wallet_address}"
 
     # Make a GET request to the API URL
     response = requests.get(api_url)
@@ -53,11 +51,14 @@ def get_transactions_ltc(wallet_address):
     # Check if the request was successful
     if response.status_code == 200:
         # Parse the JSON response
-        data = json.loads(response.content)
+        data = json.loads(response.content)['txids'][:15]
+        # print(data)
         print("txs successfully gathered... ")
         # Print out the transactions
-        for tx in data['txs']:
-            tx_hash = tx['hash']
+        # c =0
+        for tx in data:
+            tx_hash = tx
+            # c += 1
             print("getting txs details...")
             tx_data = get_tx_data(tx_hash)
             # print(tx_data['hash'])
