@@ -51,7 +51,7 @@ def get_transactions_ltc(wallet_address):
     # Check if the request was successful
     if response.status_code == 200:
         # Parse the JSON response
-        data = json.loads(response.content)['txids'][:15]
+        data = json.loads(response.content)['txids'][:30]
         # print(data)
         print("txs successfully gathered... ")
         # Print out the transactions
@@ -59,7 +59,7 @@ def get_transactions_ltc(wallet_address):
         for tx in data:
             tx_hash = tx
             # c += 1
-            print("getting txs details...")
+            # print("getting txs details...")
             tx_data = get_tx_data(tx_hash)
             # print(tx_data['hash'])
             # print("this is inputs...")
