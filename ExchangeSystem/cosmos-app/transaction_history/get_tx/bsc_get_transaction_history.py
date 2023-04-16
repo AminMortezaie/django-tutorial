@@ -13,10 +13,12 @@ def get_bsc_history(wallet_address):
     c = -1
     for url in urls:
         try:
-            response = requests.get(url)
+            response = requests.get(url, timeout=30)
             # print(response.text)
-        except requests.exceptions.RequestException as err:
-            raise "Something went wrong while fetching the URL:" + str(err)
+        except requests.exceptions.Timeout:
+            # Handle the timeout exception
+            print("Request timed out")
+
         transactions = response.json()["result"][:15]
 
         for transaction in transactions:
