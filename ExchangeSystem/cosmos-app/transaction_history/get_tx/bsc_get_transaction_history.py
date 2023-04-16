@@ -1,5 +1,6 @@
 import requests
-
+import time
+from time import sleep
 # address = "0xaaF0E3247b0917eC4a24c9801Cf14f742de4aaAA"
 
 
@@ -13,8 +14,12 @@ def get_bsc_history(wallet_address):
     c = -1
     for url in urls:
         try:
-            response = requests.get(url, timeout=30)
+            start_time = time.time()
+            response = requests.get(url, timeout=5)
+            elapsed_time = time.time() - start_time
+            print("Elapsed time: {:.2f} seconds".format(elapsed_time))
             # print(response.text)
+            sleep(30)
         except requests.exceptions.Timeout:
             # Handle the timeout exception
             print("Request timed out")
@@ -65,5 +70,5 @@ def get_bsc_history(wallet_address):
     return sorted_data
 
 
-# res = get_bsc_history(wallet_address=wallet_address)
+# res = get_bsc_history(wallet_address=address)
 # print(res)
