@@ -18,6 +18,7 @@ def get_bsc_history(wallet_address):
         except requests.exceptions.Timeout:
             # Handle the timeout exception
             print("Request timed out")
+            return {}
 
         transactions = response.json()["result"][:15]
 
