@@ -3,7 +3,7 @@ from .models import Wallet, Coin, Network, TransactionHistory
 from django.core.cache import cache
 from .get_tx import btc_transaction_history, eth_get_transaction_history, \
     trc20_get_transaction_history, cardano_get_transaction_history, ltc_get_transaction_history,\
-    bch_get_transaction_history, bsc_get_transaction_history
+    bch_get_transaction_history, bsc_get_transaction_history, doge_get_transaction_history
 from datetime import datetime, timedelta
 
 
@@ -40,6 +40,13 @@ def update_transactions():
             wallet = Wallet.objects.filter(address=wallet_address).first()
             coin = Coin.objects.filter(symbol='BCH', network=network).first()
             latest_txs = bch_get_transaction_history.get_transactions_bch(wallet_address)
+
+        elif wallet_network == 'doge':
+            print("wallet_network is doge")
+            network = Network.objects.filter(name='doge').first()
+            wallet = Wallet.objects.filter(address=wallet_address).first()
+            coin = Coin.objects.filter(symbol='DOGE', network=network).first()
+            latest_txs = doge_get_transaction_history.get_transactions_doge(wallet_address)
 
         elif wallet_network == 'cardano':
             print("wallet_network is cardano")
