@@ -5,7 +5,7 @@ import requests
 
 def get_transactions_bep2(wallet_address):
     responses = []
-    url = f'https://explorer.binance.org/api/v1/txs?page=1&rows=100&address={address}'
+    url = f'https://explorer.binance.org/api/v1/txs?page=1&rows=100&address={wallet_address}'
     result = requests.get(url).json()['txArray']
 
     for tx in result:
