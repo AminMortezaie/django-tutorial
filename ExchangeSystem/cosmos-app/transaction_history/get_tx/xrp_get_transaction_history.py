@@ -6,7 +6,12 @@ import requests
 def get_transactions_xrp(wallet_address):
     responses = []
     api_url = f'https://api.xrpscan.com/api/v1/account/{wallet_address}/transactions'
-    result = requests.get(api_url).json()['transactions']
+
+    try:
+        result = requests.get(api_url).json()['transactions']
+    except requests.exceptions.ConnectionError as e:
+        print(f"Request failed with {type(e).__name__}: {str(e)}")
+        return responses
 
     for tx in result:
         from_address = tx['Account']
