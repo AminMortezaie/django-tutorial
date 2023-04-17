@@ -1,6 +1,6 @@
 import requests
 
-# address = "rh4mXbGzMho3Vxwf8uwpHjBxZfkhnMZusS"
+address = "rHttapRsfyi1F269p4ozV58N6MmDTTSgwB"
 
 
 def get_transactions_xrp(wallet_address):
@@ -14,13 +14,15 @@ def get_transactions_xrp(wallet_address):
         amount = float(tx['Amount']['value'])/10**6
         coin = tx['Amount']['currency']
         tx_hash = tx['hash']
-        if from_address == wallet_address and coin == "XRP":
+        tx_result = (tx['meta']['TransactionResult'] == 'tesSUCCESS')
+
+        if from_address == wallet_address and coin == "XRP" and tx_result:
             responses.insert(0, {"tx": tx_hash, "type": "OUT", "amount": amount})
-        elif to_address == wallet_address:
+        elif to_address == wallet_address and coin == "XRP" and tx_result:
             responses.insert(0, {"tx": tx_hash, "type": "IN", "amount": amount})
 
     return responses
 
 
-# res = get_transactions_xrp(wallet_address=address)
-# print(res)
+res = get_transactions_xrp(wallet_address=address)
+print(res)
