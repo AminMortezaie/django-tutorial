@@ -1,6 +1,6 @@
 import requests
 
-address = "rHttapRsfyi1F269p4ozV58N6MmDTTSgwB"
+# address = "rHttapRsfyi1F269p4ozV58N6MmDTTSgwB"
 
 
 def get_transactions_xrp(wallet_address):
@@ -24,5 +24,5 @@ def get_transactions_xrp(wallet_address):
     return responses
 
 
-res = get_transactions_xrp(wallet_address=address)
-print(res)
+# res = get_transactions_xrp(wallet_address=address)
+# print(res)
