@@ -12,7 +12,8 @@ from .get_tx import (
     doge_get_transaction_history,
     dash_get_transaction_history,
     bep2_get_transaction_history,
-    xrp_get_transaction_history
+    xrp_get_transaction_history,
+    xlm_get_transaction_history
 )
 from datetime import datetime, timedelta
 from django.db import transaction
@@ -85,6 +86,13 @@ def update_transactions():
                         wallet = Wallet.objects.filter(address=wallet_address).first()
                         coin = Coin.objects.filter(symbol='XRP', network=network).first()
                         latest_txs = xrp_get_transaction_history.get_transactions_xrp(wallet_address)
+
+                    elif wallet_network == 'xlm':
+                        print("wallet_network is Stellar")
+                        network = Network.objects.filter(name='xlm').first()
+                        wallet = Wallet.objects.filter(address=wallet_address).first()
+                        coin = Coin.objects.filter(symbol='XLM', network=network).first()
+                        latest_txs = xlm_get_transaction_history.get_transactions_xlm(wallet_address)
 
                     elif wallet_network == 'erc20':
                         print("wallet_network is erc20")
