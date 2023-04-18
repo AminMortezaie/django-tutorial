@@ -148,7 +148,7 @@ def update_transactions():
                     # Iterate through the transactions and update your database
                     if latest_txs is not None:
                         for tx in latest_txs:
-                            print("getting transactions for ")
+                            print("getting transactions for ", wallet_network)
 
                             networks_with_coins = (wallet_network == 'erc20' or wallet_network == 'trc20'
                                                    or wallet_network == 'bsc' or wallet_network == 'bep2')
@@ -195,7 +195,7 @@ def update_transactions():
                                 tx_obj.save()
                                 print("tx might be saved...")
                             else:
-                                print("Transaction already exists in database")
+                                pass
 
                             # Invalidate the cached result for this wallet so that it will be refreshed on the next request
                             cache.delete(f'transactions_{wallet_id}')
