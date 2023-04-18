@@ -51,7 +51,7 @@ def get_transactions_doge(wallet_address):
     # Check if the request was successful
     if response.status_code == 200:
         # Parse the JSON response
-        data = json.loads(response.content)['txids'][:30]
+        data = json.loads(response.content)['txids'][:10]
         # print(data)
         print("txs successfully gathered... ")
         # Print out the transactions
