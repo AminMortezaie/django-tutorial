@@ -9,18 +9,27 @@ def get_transactions_theta(wallet_address):
     api_url = f'http://www.thetascan.io/api/transactions/?address={wallet_address}'
     try:
         response = requests.get(api_url).json()
-        # print(response)
 
         for tx in response:
-            # print(tx)
             tx_hash = tx['hash']
             from_address = tx['sending_address']
             to_address = tx['recieving_address']
-            amount = tx['theta']
+
+            float_theta = float(tx['theta'].replace(",", ""))
+            float_tfuel = float(tx['tfuel'].replace(",", ""))
+            if float_theta != 0.0:
+                amount = float_theta
+                contract_address = 'theta'
+            else:
+                amount = float_tfuel
+                contract_address = 'tfuel'
+
             if from_address == wallet_address:
-                responses.insert(0, {"tx": tx_hash, "type": "OUT", "amount": amount})
+                responses.insert(0,
+                                 {"tx": tx_hash, "type": "OUT", "amount": amount, "contract_address": contract_address})
             elif to_address == wallet_address:
-                responses.insert(0, {"tx": tx_hash, "type": "IN", "amount": amount})
+                responses.insert(0,
+                                 {"tx": tx_hash, "type": "IN", "amount": amount, "contract_address": contract_address})
         return responses
 
     except Exception as e:
