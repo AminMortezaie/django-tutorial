@@ -15,7 +15,8 @@ from .get_tx import (
     xrp_get_transaction_history,
     xlm_get_transaction_history,
     polkadot_get_transaction_history,
-    theta_get_transaction_history
+    theta_get_transaction_history,
+    dgb_get_transaction_history
 )
 from datetime import datetime, timedelta
 from django.db import transaction
@@ -102,6 +103,13 @@ def update_transactions():
                         wallet = Wallet.objects.filter(address=wallet_address).first()
                         coin = Coin.objects.filter(symbol='DOT', network=network).first()
                         latest_txs = polkadot_get_transaction_history.get_transactions_polkadot(wallet_address)
+
+                    elif wallet_network == 'dgb':
+                        print("wallet_network is dgb")
+                        network = Network.objects.filter(name='dgb').first()
+                        wallet = Wallet.objects.filter(address=wallet_address).first()
+                        coin = Coin.objects.filter(symbol='DGB', network=network).first()
+                        latest_txs = dgb_get_transaction_history.get_transactions_dgb(wallet_address)
 
                     elif wallet_network == 'theta':
                         print("wallet_network is theta")
