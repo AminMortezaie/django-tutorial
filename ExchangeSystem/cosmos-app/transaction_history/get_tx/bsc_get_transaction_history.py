@@ -58,7 +58,7 @@ def get_bsc_history(wallet_address):
                                           "contract_address": contract_address, "timestamp": str(timestamp)})
                     tx_hash_map[transaction['hash']] = True
                 break
-            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+            except Exception as e:
                 print(f"Request failed with {type(e).__name__}: {str(e)}")
                 retries -= 1
                 if retries == 0:
