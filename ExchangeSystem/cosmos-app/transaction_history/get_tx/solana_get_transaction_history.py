@@ -31,7 +31,7 @@ def get_transactions_solana(wallet_address):
         except Exception as e:
             print(f"Request failed with {type(e).__name__}: Token is not solana.")
         print("tx added...")
-        sleep(5)
+        sleep(10)
 
     return responses
 
