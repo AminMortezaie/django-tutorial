@@ -3,12 +3,12 @@ import json
 from time import sleep
 
 # address = 'DkdT8hzJmXRsJ4tTJLxh9TucQqq5hmo2pHJM3NpXcVaH'
-rpc_url = 'https://api.mainnet-beta.solana.com'
+rpc_url = 'https://alien-spring-season.solana-mainnet.discover.quiknode.pro/ae22f1a0a4da3d5e3a570d4e2270f82666b12096/'
 
 
 def get_transactions_solana(wallet_address):
     responses = []
-    limit = 10
+    limit = 50
     payload = {
         "jsonrpc": "2.0",
         "id": 1,
@@ -22,17 +22,15 @@ def get_transactions_solana(wallet_address):
 
     response = requests.post(rpc_url, data=json.dumps(payload), headers=headers)
     result = response.json()['result']
-
     print("txs successfully gathered...")
     for tx in result:
         tx_hash = tx['signature']
         try:
-            responses.insert(0, get_tx_data(tx_hash, wallet_address))
+            if get_tx_data(tx_hash, wallet_address) is not None:
+                responses.insert(0, get_tx_data(tx_hash, wallet_address))
+                print("tx added...")
         except Exception as e:
             print(f"Request failed with {type(e).__name__}: Token is not solana.")
-        print("tx added...")
-        sleep(10)
-
     return responses
 
 
@@ -46,26 +44,25 @@ def get_tx_data(tx_hash, wallet_address):
     headers = {
         'Content-Type': 'application/json'
     }
-    response = requests.post(rpc_url, data=json.dumps(payload), headers=headers)
-    result = response.json()['result']
-    account_keys = result['transaction']['message']['accountKeys']
-    pre_balances = result['meta']['preBalances']
-    post_balances = result['meta']['postBalances']
 
-    for number in range(len(account_keys)):
-        amount = (float(post_balances[number]) - float(pre_balances[number])) / 10**9
+    try:
+        response = requests.post(rpc_url, data=json.dumps(payload), headers=headers)
+        result = response.json()['result']
+        account_keys = result['transaction']['message']['accountKeys']
+        pre_balances = result['meta']['preBalances']
+        post_balances = result['meta']['postBalances']
 
-        # this is receiver address
-        if amount > 0:
+        for number in range(len(account_keys)):
+            amount = (float(post_balances[number]) - float(pre_balances[number])) / 10**9
             if account_keys[number] == wallet_address:
                 if account_keys[-1] == "11111111111111111111111111111111":
-                    return {"tx": tx_hash, "type": "IN", "amount": amount}
+                    if amount > 0:
+                        return {"tx": tx_hash, "type": "IN", "amount": amount}
+                    else:
+                        return {"tx": tx_hash, "type": "OUT", "amount": -amount}
 
-        # this is sender address
-        else:
-            if account_keys[number] == wallet_address:
-                if account_keys[-1] == "11111111111111111111111111111111":
-                    return {"tx": tx_hash, "type": "OUT", "amount": -amount}
+    except Exception as e:
+        print(f"Request failed with {type(e).__name__}: {str(e)}")
 
 
 # res = get_transactions_solana(wallet_address=address)
