@@ -11,9 +11,10 @@ def get_bsc_history(wallet_address):
     urls = [get_token_tx_url, get_pure_tx_url]
 
     for url in urls:
-        retries = 3
+        retries = 5
         while retries > 0:
             try:
+                time.sleep(5)
                 start_time = time.time()
                 response = requests.get(url, timeout=5)
                 elapsed_time = time.time() - start_time
