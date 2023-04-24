@@ -25,9 +25,4 @@ app.conf.beat_schedule = {
         # Schedule
         'schedule': 300.0
     },
-    'update_bsc': {
-        'task': 'update_bsc',
-        # Schedule
-        'schedule': 300.0
-    },
 }

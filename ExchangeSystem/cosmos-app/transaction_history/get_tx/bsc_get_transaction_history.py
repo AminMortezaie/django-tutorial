@@ -11,10 +11,9 @@ def get_bsc_history(wallet_address):
     urls = [get_token_tx_url, get_pure_tx_url]
 
     for url in urls:
-        retries = 5
+        retries = 3
         while retries > 0:
             try:
-                time.sleep(5)
                 start_time = time.time()
                 response = requests.get(url, timeout=5)
                 elapsed_time = time.time() - start_time
@@ -61,6 +60,7 @@ def get_bsc_history(wallet_address):
                 break
             except Exception as e:
                 print(f"Request failed with {type(e).__name__}: {str(e)}")
+                time.sleep(10)
                 retries -= 1
                 if retries == 0:
                     print("Max retries exceeded. Giving up.")
