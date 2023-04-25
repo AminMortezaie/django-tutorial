@@ -9,6 +9,8 @@ services:
       - "3000:3000"
     networks:
       - my-network
+    restart: unless-stopped
+
   zil:
     build:
       context: .
@@ -17,6 +19,7 @@ services:
       - "8080:8080"
     networks:
       - my-network
+    restart: unless-stopped
   web:
     build: .
     command: python /code/manage.py runserver 0.0.0.0:8000
@@ -31,6 +34,8 @@ services:
       - beat
     networks:
       - my-network
+    restart: unless-stopped
+
   db:
     image: postgres:13
     volumes:
@@ -39,11 +44,14 @@ services:
       - "POSTGRES_HOST_AUTH_METHOD=trust"
     networks:
       - my-network
+    restart: unless-stopped
 
   redis:
     image: redis:latest
     networks:
       - my-network
+    mem_limit: 1024m
+    restart: unless-stopped
 
   celery:
     build: .
@@ -55,6 +63,8 @@ services:
       - beat
     networks:
       - my-network
+    restart: unless-stopped
+
   beat:
     build: .
     command: celery -A cosmos beat -l info
@@ -64,6 +74,7 @@ services:
       - redis
     networks:
       - my-network
+    restart: unless-stopped
 
 volumes:
   postgres_data:
