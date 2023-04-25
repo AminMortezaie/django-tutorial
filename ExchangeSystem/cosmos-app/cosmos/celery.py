@@ -23,16 +23,16 @@ app.conf.beat_schedule = {
     'update': {
         'task': 'update_transactions',
         # Schedule
-        'schedule': 300.0
+        'schedule': 900.0
     },
     'update_bep20': {
         'task': 'update_transactions_bep20',
         # Schedule
-        'schedule': 300.0
+        'schedule': 900.0
     },
     'update_getblock': {
         'task': 'update_transactions_getblock',
         # Schedule
-        'schedule': 300.0
+        'schedule': 900.0
     },
 }

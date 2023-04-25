@@ -25,6 +25,11 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
 
+CELERY_CONFIG = {
+    'broker_transport_options': {'visibility_timeout': 3600*10},
+    'worker_prefetch_multiplier': 1,
+}
+
 CELERY_BEAT_SCHEDULE = {
     'update-transactions': {
         'task': 'update_transactions',
