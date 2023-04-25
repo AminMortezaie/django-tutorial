@@ -6,7 +6,7 @@ from .models import Wallet, Coin, Network, TransactionHistory
 from .serializers import WalletSerializer, NetworkSerializer, CoinSerializer, TransactionHistorySerializer
 from django.core.cache import cache
 from .get_tx import btc_transaction_history, eth_get_transaction_history
-from .tasks import update_transactions
+from .tasks import update_transactions, update_transactions_bep20
 
 
 class WalletObject(generics.RetrieveDestroyAPIView):
@@ -99,6 +99,7 @@ class TransactionHistoryList(generics.ListAPIView):
     serializer_class = TransactionHistorySerializer
     permission_classes = [permissions.IsAuthenticated]
     update_transactions.delay()
+    update_transactions_bep20.delay()
 
     def get_queryset(self):
         wallet_id = self.kwargs['wallet_id']

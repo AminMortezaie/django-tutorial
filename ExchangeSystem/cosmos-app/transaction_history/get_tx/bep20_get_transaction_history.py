@@ -5,7 +5,6 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
 YOUR_API_KEY = os.getenv("BEP20_API")
 
 
@@ -27,15 +26,12 @@ def get_bep20_history(wallet_address):
                 transactions = response.json()["result"][:15]
                 for transaction in transactions:
                     timestamp = transaction['timeStamp']
-                    # print(c, ":", transaction['hash'])
                     sender = transaction['from']
                     receiver = transaction['to']
                     value = float(transaction['value']) / 10**18
-                    # print("Sender: ", sender)
                     contract_address = ''
                     if transaction['contractAddress'] != '':
                         contract_address = transaction['contractAddress']
-                        # print("Contract Address1:", transaction['contractAddress'])
 
                     # Check if the transaction is an ERC-20 token transfer
                     if "input" in transaction and len(transaction["input"]) > 2:
@@ -45,14 +41,8 @@ def get_bep20_history(wallet_address):
                             # Extract the token recipient address and amount from the input data
                             token_recipient = "0x" + transaction["input"][34:74]
                             token_amount = int(transaction["input"][74:], 16) / 10**18
-                            # print("Token Transfer:")
-                            # print("Contract Address2:", contract_address)
                             receiver = token_recipient
                             value = token_amount
-
-                    # print("Receiver: ", receiver)
-                    # print("Amount: ", value)
-                    # print("------------------")
 
                     if wallet_address.lower() == str(sender) and transaction['hash'] not in tx_hash_map:
                         responses.insert(0,
@@ -66,7 +56,6 @@ def get_bep20_history(wallet_address):
                 break
             except Exception as e:
                 print(f"Request failed with {type(e).__name__}: {str(e)}")
-                time.sleep(10)
                 retries -= 1
                 if retries == 0:
                     print("Max retries exceeded. Giving up.")
