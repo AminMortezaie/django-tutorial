@@ -19,7 +19,8 @@ from .get_tx import (
     dgb_get_transaction_history,
     zcash_get_transaction_history,
     solana_get_transaction_history,
-    vet_get_transaction_history
+    vet_get_transaction_history,
+    polygon_get_transaction_history
 )
 from datetime import datetime, timedelta
 from django.db import transaction
@@ -150,7 +151,6 @@ def update_transactions():
                     elif wallet_network == 'trc20':
                         print("wallet network is trc20")
                         network = Network.objects.filter(name='trc20').first()
-                        print(wallet_address)
                         wallet = Wallet.objects.filter(address=wallet_address).first()
                         latest_txs = trc20_get_transaction_history.get_trc20_transactions(wallet_address)
 
@@ -166,6 +166,12 @@ def update_transactions():
                         wallet = Wallet.objects.filter(address=wallet_address).first()
                         latest_txs = bep2_get_transaction_history.get_transactions_bep2(wallet_address)
 
+                    elif wallet_network == 'polygon':
+                        print("wallet_network is polygon")
+                        network = Network.objects.filter(name='polygon').first()
+                        wallet = Wallet.objects.filter(address=wallet_address).first()
+                        latest_txs = polygon_get_transaction_history.get_polygon_history(wallet_address)
+
                     else:
                         latest_txs = None
 
@@ -175,7 +181,8 @@ def update_transactions():
                             print("getting transactions for ", wallet_network)
 
                             networks_with_coins = (wallet_network == 'erc20' or wallet_network == 'trc20'
-                                                   or wallet_network == 'bep2' or wallet_network == 'bsc')
+                                                   or wallet_network == 'bep2' or wallet_network == 'bsc'
+                                                   or wallet_network == 'polygon')
 
                             if networks_with_coins and tx['contract_address'] != '':
                                 coin = Coin.objects.filter(contract=tx['contract_address'], network=network).first()
@@ -194,6 +201,9 @@ def update_transactions():
                             elif wallet_network == 'bep2' and tx['contract_address'] == '':
                                 coin = Coin.objects.filter(symbol='BNB', network=network).first()
 
+                            elif wallet_network == 'polygon' and tx['contract_address'] == '':
+                                coin = Coin.objects.filter(symbol='MATIC', network=network).first()
+
                             elif wallet_network == 'theta' and tx['contract_address'] == 'theta':
                                 coin = Coin.objects.filter(symbol='THETA', network=network).first()
 
@@ -205,7 +215,6 @@ def update_transactions():
                                                                             amount=tx['amount'], wallet=wallet).first()
 
                             if not existing_tx:
-                                # Convert the transaction data to a dictionary compatible with the TransactionHistory model
                                 tx_data = {
                                     'transaction_hash': tx['tx'],
                                     'amount': tx['amount'],
@@ -221,7 +230,6 @@ def update_transactions():
                             else:
                                 pass
 
-                            # Invalidate the cached result for this wallet so that it will be refreshed on the next request
                             cache.delete(f'transactions_{wallet_id}')
                     else:
                         print("no transaction received.")
