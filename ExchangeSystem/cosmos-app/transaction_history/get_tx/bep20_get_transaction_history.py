@@ -1,13 +1,19 @@
 import requests
 import time
 from time import sleep
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+YOUR_API_KEY = os.getenv("BEP20_API")
 
 
-def get_bsc_history(wallet_address):
+def get_bep20_history(wallet_address):
     responses = []
     tx_hash_map = {}
-    get_token_tx_url = f"https://api.bscscan.com/api?module=account&action=tokentx&address={wallet_address}&startblock=0&endblock=99999999&sort=desc"
-    get_pure_tx_url = f"https://api.bscscan.com/api?module=account&action=txlist&address={wallet_address}&startblock=0&endblock=99999999&sort=desc"
+    get_token_tx_url = f"https://api.bscscan.com/api?module=account&action=tokentx&address={wallet_address}&startblock=0&endblock=99999999&sort=descc&apikey={YOUR_API_KEY}"
+    get_pure_tx_url = f"https://api.bscscan.com/api?module=account&action=txlist&address={wallet_address}&startblock=0&endblock=99999999&sort=descc&apikey={YOUR_API_KEY}"
     urls = [get_token_tx_url, get_pure_tx_url]
 
     for url in urls:
