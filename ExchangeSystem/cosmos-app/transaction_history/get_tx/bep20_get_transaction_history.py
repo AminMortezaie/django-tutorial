@@ -21,7 +21,7 @@ def get_bep20_history(wallet_address):
         while retries > 0:
             try:
                 start_time = time.time()
-                response = requests.get(url, timeout=5)
+                response = requests.get(url)
                 elapsed_time = time.time() - start_time
                 print("Elapsed time: {:.2f} seconds".format(elapsed_time))
                 transactions = response.json()["result"][:15]
