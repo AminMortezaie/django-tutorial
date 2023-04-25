@@ -30,4 +30,9 @@ app.conf.beat_schedule = {
         # Schedule
         'schedule': 300.0
     },
+    'update_getblock': {
+        'task': 'update_transactions_getblock',
+        # Schedule
+        'schedule': 300.0
+    },
 }
