@@ -20,7 +20,8 @@ from .get_tx import (
     zcash_get_transaction_history,
     solana_get_transaction_history,
     vet_get_transaction_history,
-    polygon_get_transaction_history
+    polygon_get_transaction_history,
+    harmony_get_transaction_history
 )
 from datetime import datetime, timedelta
 from django.db import transaction
@@ -374,6 +375,13 @@ def update_transactions_getblock():
                         wallet = Wallet.objects.filter(address=wallet_address).first()
                         coin = Coin.objects.filter(symbol='ZEC', network=network).first()
                         latest_txs = zcash_get_transaction_history.get_transactions_zcash(wallet_address)
+
+                    elif wallet_network == 'harmony':
+                        print("wallet_network is harmony")
+                        network = Network.objects.filter(name='harmony').first()
+                        wallet = Wallet.objects.filter(address=wallet_address).first()
+                        coin = Coin.objects.filter(symbol='ONE', network=network).first()
+                        latest_txs = harmony_get_transaction_history.get_transactions_harmony(wallet_address)
 
                     else:
                         latest_txs = None
