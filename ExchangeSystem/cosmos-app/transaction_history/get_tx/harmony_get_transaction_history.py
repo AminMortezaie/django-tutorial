@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 getblock_api = os.getenv('GET_BLOCK_API')
-address = "one1wx6p8kjucu5llqz79h9pmn0qf55772m2d2xt26"
+# address = "one1wx6p8kjucu5llqz79h9pmn0qf55772m2d2xt26"
 
 
 def get_real_amount(hex_value):
@@ -51,5 +51,5 @@ def get_transactions_harmony(wallet_address):
         print('Error:', response.status_code, response.text)
 
 
-res = get_transactions_harmony(wallet_address=address)
-print(res)
+# res = get_transactions_harmony(wallet_address=address)
+# print(res)
