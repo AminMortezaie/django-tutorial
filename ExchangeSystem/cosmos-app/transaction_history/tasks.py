@@ -21,7 +21,8 @@ from .get_tx import (
     solana_get_transaction_history,
     vet_get_transaction_history,
     polygon_get_transaction_history,
-    harmony_get_transaction_history
+    harmony_get_transaction_history,
+    cosmos_get_transaction_history
 )
 from datetime import datetime, timedelta
 from django.db import transaction
@@ -136,6 +137,13 @@ def update_transactions():
                         wallet = Wallet.objects.filter(address=wallet_address).first()
                         coin = Coin.objects.filter(symbol='VET', network=network).first()
                         latest_txs = vet_get_transaction_history.get_transactions_vet(wallet_address)
+
+                    elif wallet_network == 'cosmos':
+                        print("wallet_network is cosmos")
+                        network = Network.objects.filter(name='cosmos').first()
+                        wallet = Wallet.objects.filter(address=wallet_address).first()
+                        coin = Coin.objects.filter(symbol='ATOM', network=network).first()
+                        latest_txs = cosmos_get_transaction_history.get_transactions_cosmos(wallet_address)
 
                     elif wallet_network == 'theta':
                         print("wallet_network is theta")
