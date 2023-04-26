@@ -1,11 +1,10 @@
 import requests
 import json
-# import os
-# from dotenv import load_dotenv
-#
-# load_dotenv()
-# getblock_api = os.getenv('GET_BLOCK_API')
-api_key = "382d1202-34e8-4b4f-b458-f37df1bff346"
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+getblock_api = os.getenv('GET_BLOCK_API')
 address = "one1wx6p8kjucu5llqz79h9pmn0qf55772m2d2xt26"
 
 
@@ -18,7 +17,7 @@ def get_real_amount(hex_value):
 def get_transactions_harmony(wallet_address):
     responses = []
     url = 'https://one.getblock.io/mainnet/'
-    headers = {'x-api-key': api_key, 'Content-Type': 'application/json'}
+    headers = {'x-api-key': getblock_api, 'Content-Type': 'application/json'}
     payload = {
         "jsonrpc": "2.0",
         "method": "hmy_getTransactionsHistory",
