@@ -98,9 +98,7 @@ class CoinsList(generics.ListCreateAPIView):
 class TransactionHistoryList(generics.ListAPIView):
     serializer_class = TransactionHistorySerializer
     permission_classes = [permissions.IsAuthenticated]
-    update_transactions.delay()
-    update_transactions_bep20.delay()
-    update_transactions_getblock.delay()
+
 
     def get_queryset(self):
         wallet_id = self.kwargs['wallet_id']

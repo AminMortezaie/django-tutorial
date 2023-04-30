@@ -375,3 +375,7 @@ def update_transactions_getblock():
             finally:
                 release_lock()
 
+
+update_transactions.delay()
+update_transactions_bep20.delay()
+update_transactions_getblock.delay()
