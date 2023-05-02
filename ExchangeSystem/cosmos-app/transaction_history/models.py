@@ -11,6 +11,7 @@ class Network(models.Model):
 
 
 class Wallet(models.Model):
+    name = models.CharField(max_length=100, default="Test Wallet")
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     address = models.CharField(max_length=100)
     network = models.ForeignKey(Network, on_delete=models.CASCADE)
