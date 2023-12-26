@@ -13,10 +13,10 @@ const { Transaction } = require('@zilliqa-js/account');
 const { BN, Long, bytes, units } = require('@zilliqa-js/util');
 const { Zilliqa } = require('@zilliqa-js/zilliqa');
 const CP = require('@zilliqa-js/crypto');
-const CHAIN_ID = 333;
+const CHAIN_ID = 1;
 const MSG_VERSION = 1;
 const VERSION = bytes.pack(CHAIN_ID, MSG_VERSION);
-const zilliqa = new Zilliqa('https://dev-api.zilliqa.com');
+const zilliqa = new Zilliqa('https://api.zilliqa.com');
 const runAll = (transaction) => __awaiter(void 0, void 0, void 0, function* () {
     const privateKey = transaction.private_key;
     const toAddress = transaction.to_address;
